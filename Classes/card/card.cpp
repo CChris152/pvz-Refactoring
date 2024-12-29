@@ -1,4 +1,4 @@
-#include "HelloWorldScene.h"
+#include "PVZ.h"
 USING_NS_CC;
 void card::card_init()
 {

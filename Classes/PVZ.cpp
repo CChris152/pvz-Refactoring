@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "HelloWorldScene.h"
+#include "PVZ.h"
 #include "ui/CocosGUI.h"
 USING_NS_CC;
 
