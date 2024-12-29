@@ -8,10 +8,7 @@ zombie::zombie(Sprite *outside_sprite,double outside_line)
 {
 	Sprite::onEnter();
 	sprite = outside_sprite;
-	speed = 60;
 	line = static_cast<int>((600-outside_line)/100);
-	type = 0;               /*普通僵尸标识*/
-	loadResource();          /*加载资源*/
 	this->scheduleUpdate();
 }
 void zombie::loadResource()
@@ -116,52 +113,19 @@ void zombie::init_animate()
 }
 void zombie::init_move_animate()
 {
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/move/1.png",Rect(0,0,166,144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/move/2.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/move/3.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/move/4.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/move/5.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/move/6.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/move/7.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/move/8.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/move/9.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/move/10.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/move/11.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/move/12.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/move/13.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/move/14.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/move/15.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/move/16.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/move/17.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/move/18.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/move/19.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/move/20.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/move/21.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/move/22.png", Rect(0, 0, 166, 144)));
+	for (int i = 1; i < move_num + 1; i++)
+	{
+		std::string num = std::to_string(i);
+		moveFrames.pushBack(SpriteFrame::create(FrameDir+"move/"+num+".png", Rect(0, 0, 166, 144)));
+	}
 }
 void zombie::init_eat_animate()
 {
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/eat/1.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/eat/2.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/eat/3.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/eat/4.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/eat/5.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/eat/6.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/eat/7.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/eat/8.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/eat/9.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/eat/10.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/eat/11.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/eat/12.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/eat/13.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/eat/14.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/eat/15.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/eat/16.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/eat/17.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/eat/18.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/eat/19.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/eat/20.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/eat/21.png", Rect(0, 0, 166, 144)));
+	for (int i = 1; i < eat_num + 1; i++)
+	{
+		std::string num = std::to_string(i);
+		eatFrames.pushBack(SpriteFrame::create(FrameDir + "eat/" + num + ".png", Rect(0, 0, 166, 144)));
+	}
 }
 void zombie::init_wait_animate()
 {
@@ -329,4 +293,17 @@ void Buckethead_zombie::init_move_animate()
 	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/move/13.png", Rect(0, 0, 166, 144)));
 	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/move/14.png", Rect(0, 0, 166, 144)));
 	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/move/15.png", Rect(0, 0, 166, 144)));
+}
+
+
+
+/*Refectoring*/
+void zombie::setBasic(std::string FrameDir, int speed, double blood, int type,int eat_num,int move_num)
+{
+	this->FrameDir = FrameDir;
+	this->speed = speed;
+	this->type = type;
+	this->blood = blood;
+	this->eat_num = eat_num;
+	this->move_num = move_num;
 }

@@ -1,16 +1,25 @@
 #pragma once
 #include"cocos2d.h"
-#include"zombie/zombie.h"
+#include<zombie/zombie.h>
 #include "ui/CocosGUI.h"
 USING_NS_CC;
-// 工厂接口
 
-class Factory
+
+class Factory  //宸ュ巶鍩虹被
 {
 public:
-    Sprite* createSprite(Sprite* outside_sprite)
-    {
-    };
-    ~Factory(){}
+	static Sprite* add_sprite(cocos2d::Node* parent,int layer);
+    
+    
 };
-
+class ZombieFactory:Factory  //鍍靛案宸ュ巶
+{
+    static void load_normal(zombie* zombie);
+    static void load_flag(zombie* zombie);
+    static void load_buckethead(zombie* zombie);
+public:
+    static zombie* add_zombie(double line, cocos2d::Node* parent);
+    static void add_normal_zombie(double line, cocos2d::Node* parent);
+    static void add_flag_zombie(double line, cocos2d::Node* parent);
+    static void add_buckethead_zombie(double line, cocos2d::Node* parent);
+};

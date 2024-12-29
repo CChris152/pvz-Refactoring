@@ -103,6 +103,9 @@ bool Level::init()
 	visibleSize = Director::getInstance()->getVisibleSize(); /*获取窗口大小*/
 	loadResoure();
 	this->scheduleUpdate();
+	ZombieFactory::add_normal_zombie(LINE_5, this);
+	ZombieFactory::add_buckethead_zombie(LINE_3, this);
+	ZombieFactory::add_flag_zombie(LINE_4, this);
 	return true;
 }
 void Level::loadResoure()

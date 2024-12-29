@@ -9,7 +9,7 @@
 #include<card/card.h>
 #include<level/level.h>
 #include<plant/plant.h>
-
+#include<factory/factory.h>
 #include<car/car.h>
 #include<zombie/zombie.h>
 #include<select/select.h>
