@@ -85,9 +85,6 @@ public:
 
 
 
-    void add_zombie(double line);
-    void add_Buckethead_zombie(double line);
-    void add_Flag_zombie(double line);
     void add_plant(double line, double row);
     void add_sunflower(double x,double y);
     void add_potato(double x, double y);

@@ -70,7 +70,7 @@ public:
     CREATE_FUNC(PVZ);
 };
 /*≥ı º“≥√Ê¿‡*/
-extern plant* board[5][9];
+extern Plant* board[5][9];
 extern std::vector<zombie*>line_1;
 extern std::vector<zombie*>line_2;
 extern std::vector<zombie*>line_3;

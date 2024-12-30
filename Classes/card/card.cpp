@@ -52,12 +52,10 @@ void card::add_plant(double x,double y)
 {
 	int row = static_cast<int>((x - 75) / 85);
 	int line = static_cast<int>((520 - y) / 100);
+	PlantFactory::add_bulletShooter(row, line, sprite->getParent());
+	//PlantFactory::add_plant(row, line, sprite->getParent());
 	/*考虑到整形运算不会有四舍五入，先加上50在进行运算*/
-	auto s = Sprite::create("pictures/plant/bullet_shooter/1.png");
-	sprite->getParent()->addChild(s, 2);
-	s->setPosition(row * 85 + 125, 470 - line  * 100);
-	plant* shooter = new plant(s);
-	board[line][row] = shooter;
+
 }
 void card::plant_music()
 {
@@ -294,12 +292,9 @@ void sunflower_card::add_plant(double x, double y)
 {
 	int row = static_cast<int>((x - 75) / 85);
 	int line = static_cast<int>((520 - y) / 100);
+	PlantFactory::add_sunflower(row, line, sprite->getParent());
 	/*考虑到整形运算不会有四舍五入，先加上50在进行运算*/
-	auto s = Sprite::create("pictures/plant/sunflower/1.png");
-	sprite->getParent()->addChild(s, 2);
-	s->setPosition(row * 85 + 125, 470 - line * 100);
-	sunflower* a = new sunflower(s);
-	board[line][row] = a;
+
 }
 bool sunflower_card::touch_end(Touch* t, Event* e)
 {
@@ -413,14 +408,11 @@ bool nut_card::touch_began_select(Touch* t, Event* e)
 }
 void nut_card :: add_plant(double x, double y)
 {
+
 	int row = static_cast<int>((x - 75) / 85);
 	int line = static_cast<int>((520 - y) / 100);
-	/*考虑到整形运算不会有四舍五入，先加上50在进行运算*/
-	auto s = Sprite::create("pictures/plant/nut/1.png");
-	sprite->getParent()->addChild(s, 2);
-	s->setPosition(row * 85 + 125, 470 - line * 100);
-	nut* a = new nut(s);
-	board[line][row] = a;
+	PlantFactory::add_nut(row, line, sprite->getParent());
+
 }
 
 /*以上为坚果墙卡片类实现*/
@@ -495,10 +487,5 @@ void potato_mine_card::add_plant(double x, double y)
 {
 	int row = static_cast<int>((x - 75) / 85);
 	int line = static_cast<int>((520 - y) / 100);
-	/*考虑到整形运算不会有四舍五入，先加上50在进行运算*/
-	auto s = Sprite::create("pictures/plant/potato_mine/1.png");
-	sprite->getParent()->addChild(s, 2);
-	s->setPosition(row * 85 + 125, 470 - line * 100);
-	potato_mine* a = new potato_mine(s);
-	board[line][row] = a;
+	PlantFactory::add_potatoMine(row, line, sprite->getParent());
 }

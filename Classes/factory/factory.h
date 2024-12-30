@@ -23,3 +23,13 @@ public:
     static void add_flag_zombie(double line, cocos2d::Node* parent);
     static void add_buckethead_zombie(double line, cocos2d::Node* parent);
 };
+class PlantFactory :Factory
+{
+    static Sprite* add_plant(int row, int line, cocos2d::Node* parent);
+    static void load(int row,int line,Plant* plant);
+public:
+    static void add_bulletShooter(int row, int line, cocos2d::Node* parent);
+    static void add_sunflower(int row, int line, cocos2d::Node* parent);
+    static void add_nut(int row, int line, cocos2d::Node* parent);
+    static void add_potatoMine(int row, int line, cocos2d::Node* parent);
+};

@@ -103,9 +103,7 @@ bool Level::init()
 	visibleSize = Director::getInstance()->getVisibleSize(); /*获取窗口大小*/
 	loadResoure();
 	this->scheduleUpdate();
-	ZombieFactory::add_normal_zombie(LINE_5, this);
 	ZombieFactory::add_buckethead_zombie(LINE_3, this);
-	ZombieFactory::add_flag_zombie(LINE_4, this);
 	return true;
 }
 void Level::loadResoure()
@@ -554,127 +552,7 @@ bool Level::touch_stopButton_end(Touch* t, Event* e)
 	return false;
 }
 /*可点击精灵相应函数如上*/
-
-void Level::add_zombie(double line)
-{
-	auto sprite = Sprite::create("pictures/zombie/normal/move/1.png");
-	this->addChild(sprite, 3);
-	sprite->setPosition(Vec2(START_POSITION, line));
-	zombie* normal = new zombie(sprite, line);
-	int i = static_cast<int>((600-line)/100);
-	switch (i)
-	{
-	case 1:
-		line_1.push_back(normal);
-		break;
-	case 2:
-		line_2.push_back(normal);
-		break;
-	case 3:
-		line_3.push_back(normal);
-		break;
-	case 4:
-		line_4.push_back(normal);
-		break;
-	case 5:
-		line_5.push_back(normal);
-		break;
-	}
-}
-void Level::add_Buckethead_zombie(double line)
-{
-	auto sprite = Sprite::create("pictures/zombie/Buckethead/move/1.png");
-	this->addChild(sprite, 3);
-	sprite->setPosition(Vec2(START_POSITION, line));
-	Buckethead_zombie* normal = new Buckethead_zombie(sprite, line);
-	int i = static_cast<int>((600 - line) / 100);
-	switch (i)
-	{
-	case 1:
-		line_1.push_back(normal);
-		break;
-	case 2:
-		line_2.push_back(normal);
-		break;
-	case 3:
-		line_3.push_back(normal);
-		break;
-	case 4:
-		line_4.push_back(normal);
-		break;
-	case 5:
-		line_5.push_back(normal);
-		break;
-	}
-}
-void Level::add_Flag_zombie(double line)
-{
-	auto sprite = Sprite::create("pictures/zombie/Flag/move/1.png");
-	this->addChild(sprite, 3);
-	sprite->setPosition(Vec2(START_POSITION, line));
-	flag_zombie* normal = new flag_zombie(sprite, line);
-	int i = static_cast<int>((600 - line) / 100);
-	switch (i)
-	{
-	case 1:
-		line_1.push_back(normal);
-		break;
-	case 2:
-		line_2.push_back(normal);
-		break;
-	case 3:
-		line_3.push_back(normal);
-		break;
-	case 4:
-		line_4.push_back(normal);
-		break;
-	case 5:
-		line_5.push_back(normal);
-		break;
-	}
-}
-void Level::add_plant(double row, double line)
-{
-	auto sprite = Sprite::create("pictures/plant/bullet_shooter/1.png");
-	addChild(sprite, 2);
-	sprite->setPosition(row, line);
-	plant* shooter = new plant(sprite);
-	/*为了实现四舍五入，加上一个五十*/
-	board[static_cast<int>(static_cast<int>((600 - line) / 100) - 1)][static_cast<int>((row - 125+50) / 85)] = shooter;
-}
-void Level::add_sunflower(double x,double y)
-{
-	int row = static_cast<int>((x - 75) / 85);
-	int line = static_cast<int>((520 - y) / 100);
-	auto sprite = Sprite::create("pictures/plant/sunflower/1.png");
-	addChild(sprite, 2);
-	sprite->setPosition(row * 85 + 125, 470 - line * 100);
-	sunflower* a = new sunflower(sprite);
-	board[line][row] = a;
-}
-void Level::add_nut(double x, double y)
-{
-	int row = static_cast<int>((x - 75) / 85);
-	int line = static_cast<int>((520 - y) / 100);
-	auto sprite = Sprite::create("pictures/plant/nut/1.png");
-	addChild(sprite, 2);
-	sprite->setPosition(row * 85 + 125, 470 - line * 100);
-	nut* a = new nut(sprite);
-	board[line][row] = a;
-}
-void Level::add_potato(double x, double y)
-{
-	int row = static_cast<int>((x - 75) / 85);
-	int line = static_cast<int>((520 - y) / 100);
-	auto sprite = Sprite::create("pictures/plant/potato_mine/1.png");
-	addChild(sprite, 2);
-	sprite->setPosition(row * 85 + 125, 470 - line * 100);
-	potato_mine* a = new potato_mine(sprite);
-	board[line][row] = a;
-}
-
 /*以上为调试工具*/
-
 void Level::addsun()
 {
 	auto s = Sprite::create("pictures/sun.png");
@@ -688,20 +566,14 @@ void Level::addsun()
 void Level::addzombie()
 {
 	int line = rand() % 5+1;   /*产生的行数为[1,5]*/
-	add_zombie(static_cast<double>(570-line*100));          /*无论数量是多少首先都得先生成一个僵尸*/
+	ZombieFactory::add_normal_zombie(static_cast<double>(570 - line * 100), this);
+	        /*无论数量是多少首先都得先生成一个僵尸*/
 }
-
-
-
 void Level::update(float dt)
 {
 	sun_total->setString(StringUtils::format("%d", total));   /*刷新太阳总数*/
 	gaming();       /*进行游戏*/
 }
-
-
-
-
 void Level::back_to_select()
 {
 	stop_music();
@@ -860,86 +732,86 @@ void Level::flush()
 			case 1:
 				if (flush_time == 2000)   /*生成旗帜僵尸*/
 				{
-					add_Flag_zombie(LINE_1);
+					ZombieFactory::add_flag_zombie(LINE_1, this);
 				}
 				if (num_1 <= 6)
 				{                 /*让每一行分配到的僵尸数量都平均一点*/
 					num_1++;
 					if (Buckethead_num != 0)     /*添加铁通僵尸*/
 					{
-						add_Buckethead_zombie(LINE_1);
+						ZombieFactory::add_buckethead_zombie(LINE_1, this);
 						Buckethead_num--;
 					}
 					else
-						add_zombie(LINE_1);
+						ZombieFactory::add_normal_zombie(LINE_1, this);
 				}
 				break;
 			case 2:
 				if (flush_time == 2000)   /*生成旗帜僵尸*/
 				{
-					add_Flag_zombie(LINE_2);
+					ZombieFactory::add_flag_zombie(LINE_2, this);
 				}
 				if (num_2 <= 6)
 				{                 /*让每一行分配到的僵尸数量都平均一点*/
 					num_2++;
 					if (Buckethead_num != 0)     /*添加铁通僵尸*/
 					{
-						add_Buckethead_zombie(LINE_2);
+						ZombieFactory::add_buckethead_zombie(LINE_2, this);
 						Buckethead_num--;
 					}
 					else
-						add_zombie(LINE_2);
+						ZombieFactory::add_normal_zombie(LINE_2, this);
 				}
 				break;
 			case 3:
 				if (flush_time == 2000)   /*生成旗帜僵尸*/
 				{
-					add_Flag_zombie(LINE_3);
+					ZombieFactory::add_flag_zombie(LINE_3, this);
 				}
 				if (num_3 <= 6)
 				{                 /*让每一行分配到的僵尸数量都平均一点*/
 					num_3++;
 					if (Buckethead_num != 0)     /*添加铁通僵尸*/
 					{
-						add_Buckethead_zombie(LINE_3);
+						ZombieFactory::add_buckethead_zombie(LINE_3, this);
 						Buckethead_num--;
 					}
 					else
-						add_zombie(LINE_3);
+						ZombieFactory::add_normal_zombie(LINE_3, this);
 				}
 				break;
 			case 4:
 				if (flush_time == 2000)   /*生成旗帜僵尸*/
 				{
-					add_Flag_zombie(LINE_4);
+					ZombieFactory::add_flag_zombie(LINE_4, this);
 				}
 				if (num_4 <= 6)
 				{                 /*让每一行分配到的僵尸数量都平均一点*/
 					num_4++;
 					if (Buckethead_num != 0)     /*添加铁通僵尸*/
 					{
-						add_Buckethead_zombie(LINE_4);
+						ZombieFactory::add_buckethead_zombie(LINE_4, this);
 						Buckethead_num--;
 					}
 					else
-						add_zombie(LINE_4);
+						ZombieFactory::add_normal_zombie(LINE_4, this);
 				}
 				break;
 			case 5:
 				if (flush_time == 2000)   /*生成旗帜僵尸*/
 				{
-					add_Flag_zombie(LINE_5);
+					ZombieFactory::add_flag_zombie(LINE_5, this);
 				}
 				if (num_5 <= 6)
 				{                 /*让每一行分配到的僵尸数量都平均一点*/
 					num_5++;
 					if (Buckethead_num != 0)     /*添加铁通僵尸*/
 					{
-						add_Buckethead_zombie(LINE_5);
+						ZombieFactory::add_buckethead_zombie(LINE_5, this);
 						Buckethead_num--;
 					}
 					else
-						add_zombie(LINE_5);
+						ZombieFactory::add_normal_zombie(LINE_5, this);
 				}
 				break;
 			}
@@ -1057,56 +929,56 @@ void Level_1::flush()
 			case 1:
 				if (flush_time == 1000)   /*生成旗帜僵尸*/
 				{
-					add_Flag_zombie(LINE_1);
+					ZombieFactory::add_flag_zombie(LINE_1, this);
 				}
 				if (num_1 <= 2)
 				{                 /*让每一行分配到的僵尸数量都平均一点*/
 					num_1++;
-					add_zombie(LINE_1);
+					ZombieFactory::add_normal_zombie(LINE_1, this);
 				}
 				break;
 			case 2:
 				if (flush_time == 1000)   /*生成旗帜僵尸*/
 				{
-					add_Flag_zombie(LINE_2);
+					ZombieFactory::add_flag_zombie(LINE_2, this);
 				}
 				if (num_2 <= 2)
 				{                 /*让每一行分配到的僵尸数量都平均一点*/
 					num_2++;
-					add_zombie(LINE_2);
+					ZombieFactory::add_normal_zombie(LINE_2, this);
 				}
 				break;
 			case 3:
 				if (flush_time == 1000)   /*生成旗帜僵尸*/
 				{
-					add_Flag_zombie(LINE_3);
+					ZombieFactory::add_flag_zombie(LINE_3, this);
 				}
 				if (num_3 <= 2)
 				{                 /*让每一行分配到的僵尸数量都平均一点*/
 					num_3++;
-					add_zombie(LINE_3);
+					ZombieFactory::add_normal_zombie(LINE_3, this);
 				}
 				break;
 			case 4:
 				if (flush_time == 1000)   /*生成旗帜僵尸*/
 				{
-					add_Flag_zombie(LINE_4);
+					ZombieFactory::add_flag_zombie(LINE_4, this);
 				}
 				if (num_4 <= 2)
 				{                 /*让每一行分配到的僵尸数量都平均一点*/
 					num_4++;
-					add_zombie(LINE_4);
+					ZombieFactory::add_normal_zombie(LINE_4, this);
 				}
 				break;
 			case 5:
 				if (flush_time == 1000)   /*生成旗帜僵尸*/
 				{
-					add_Flag_zombie(LINE_5);
+					ZombieFactory::add_flag_zombie(LINE_5, this);
 				}
 				if (num_5 <= 2)
 				{                 /*让每一行分配到的僵尸数量都平均一点*/
 					num_5++;
-					add_zombie(LINE_5);
+					ZombieFactory::add_normal_zombie(LINE_5, this);
 				}
 				break;
 			}
@@ -1160,86 +1032,86 @@ void Level_2::flush()
 			case 1:
 				if (flush_time == 1500)   /*生成旗帜僵尸*/
 				{
-					add_Flag_zombie(LINE_1);
+					ZombieFactory::add_flag_zombie(LINE_1, this);
 				}
 				if (num_1 <= 4)
 				{                 /*让每一行分配到的僵尸数量都平均一点*/
 					num_1++;
 					if (Buckethead_num != 0)     /*添加铁通僵尸*/
 					{
-						add_Buckethead_zombie(LINE_1);
+						ZombieFactory::add_buckethead_zombie(LINE_1, this);
 						Buckethead_num--;
 					}
 					else
-						add_zombie(LINE_1);
+						ZombieFactory::add_normal_zombie(LINE_1, this);
 				}
 				break;
 			case 2:
 				if (flush_time == 1500)   /*生成旗帜僵尸*/
 				{
-					add_Flag_zombie(LINE_2);
+					ZombieFactory::add_flag_zombie(LINE_2, this);
 				}
 				if (num_2 <= 4)
 				{                 /*让每一行分配到的僵尸数量都平均一点*/
 					num_2++;
 					if (Buckethead_num != 0)     /*添加铁通僵尸*/
 					{
-						add_Buckethead_zombie(LINE_2);
+						ZombieFactory::add_buckethead_zombie(LINE_2, this);
 						Buckethead_num--;
 					}
 					else
-						add_zombie(LINE_2);
+						ZombieFactory::add_normal_zombie(LINE_2, this);
 				}
 				break;
 			case 3:
 				if (flush_time == 1500)   /*生成旗帜僵尸*/
 				{
-					add_Flag_zombie(LINE_3);
+					ZombieFactory::add_flag_zombie(LINE_3, this);
 				}
 				if (num_3 <= 4)
 				{                 /*让每一行分配到的僵尸数量都平均一点*/
 					num_3++;
 					if (Buckethead_num != 0)     /*添加铁通僵尸*/
 					{
-						add_Buckethead_zombie(LINE_3);
+						ZombieFactory::add_buckethead_zombie(LINE_3, this);
 						Buckethead_num--;
 					}
 					else
-						add_zombie(LINE_3);
+						ZombieFactory::add_normal_zombie(LINE_3, this);
 				}
 				break;
 			case 4:
 				if (flush_time == 1500)   /*生成旗帜僵尸*/
 				{
-					add_Flag_zombie(LINE_4);
+					ZombieFactory::add_flag_zombie(LINE_4, this);
 				}
 				if (num_4 <= 4)
 				{                 /*让每一行分配到的僵尸数量都平均一点*/
 					num_4++;
 					if (Buckethead_num != 0)     /*添加铁通僵尸*/
 					{
-						add_Buckethead_zombie(LINE_4);
+						ZombieFactory::add_buckethead_zombie(LINE_4, this);
 						Buckethead_num--;
 					}
 					else
-						add_zombie(LINE_4);
+						ZombieFactory::add_normal_zombie(LINE_4, this);
 				}
 				break;
 			case 5:
 				if (flush_time == 1500)   /*生成旗帜僵尸*/
 				{
-					add_Flag_zombie(LINE_5);
+					ZombieFactory::add_flag_zombie(LINE_5, this);
 				}
 				if (num_5 <= 4)
 				{                 /*让每一行分配到的僵尸数量都平均一点*/
 					num_5++;
 					if (Buckethead_num != 0)     /*添加铁通僵尸*/
 					{
-						add_Buckethead_zombie(LINE_5);
+						ZombieFactory::add_buckethead_zombie(LINE_5, this);
 						Buckethead_num--;
 					}
 					else
-						add_zombie(LINE_5);
+						ZombieFactory::add_normal_zombie(LINE_5, this);
 				}
 				break;
 			}

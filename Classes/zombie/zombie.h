@@ -49,22 +49,6 @@ public:
     virtual void init_wait_animate();
     virtual void init_die_animate();
 };
-/*Ω© ¨¿‡*/
-class flag_zombie :public zombie
-{
-    void init_eat_animate();
-    void init_move_animate();
-public:
-    flag_zombie(Sprite* outside_sprite, double outside_line);
-};
-class Buckethead_zombie :public zombie
-{
-    void init_eat_animate();
-    void init_move_animate();
-public:
-    Buckethead_zombie(Sprite* outside_sprite, double outside_line);
-};
-
 
 
 

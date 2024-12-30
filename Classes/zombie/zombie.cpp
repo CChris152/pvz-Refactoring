@@ -129,40 +129,19 @@ void zombie::init_eat_animate()
 }
 void zombie::init_wait_animate()
 {
-	waitFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/wait/1.png", Rect(0, 0, 166, 144)));
-	waitFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/wait/2.png", Rect(0, 0, 166, 144)));
-	waitFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/wait/3.png", Rect(0, 0, 166, 144)));
-	waitFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/wait/4.png", Rect(0, 0, 166, 144)));
-	waitFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/wait/5.png", Rect(0, 0, 166, 144)));
-	waitFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/wait/6.png", Rect(0, 0, 166, 144)));
-	waitFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/wait/7.png", Rect(0, 0, 166, 144)));
-	waitFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/wait/8.png", Rect(0, 0, 166, 144)));
-	waitFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/wait/9.png", Rect(0, 0, 166, 144)));
-	waitFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/wait/10.png", Rect(0, 0, 166, 144)));
-	waitFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/wait/11.png", Rect(0, 0, 166, 144)));
+	for (int i = 1; i < 11 + 1; i++)
+	{
+		std::string num = std::to_string(i);
+		waitFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/wait/" + num + ".png", Rect(0, 0, 166, 144)));
+	}
 }
 void zombie::init_die_animate()
 {
-	dieFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/die/1.png", Rect(0, 0, 166, 144)));
-	dieFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/die/2.png", Rect(0, 0, 166, 144)));
-	dieFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/die/3.png", Rect(0, 0, 166, 144)));
-	dieFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/die/4.png", Rect(0, 0, 166, 144)));
-	dieFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/die/5.png", Rect(0, 0, 166, 144)));
-	dieFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/die/6.png", Rect(0, 0, 166, 144)));
-	dieFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/die/7.png", Rect(0, 0, 166, 144)));
-	dieFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/die/8.png", Rect(0, 0, 166, 144)));
-	dieFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/die/9.png", Rect(0, 0, 166, 144)));
-	dieFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/die/10.png", Rect(0, 0, 166, 144)));
-	dieFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/die/11.png", Rect(0, 0, 166, 144)));
-	dieFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/die/12.png", Rect(0, 0, 166, 144)));
-	dieFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/die/13.png", Rect(0, 0, 166, 144)));
-	dieFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/die/14.png", Rect(0, 0, 166, 144)));
-	dieFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/die/15.png", Rect(0, 0, 166, 144)));
-	dieFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/die/16.png", Rect(0, 0, 166, 144)));
-	dieFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/die/17.png", Rect(0, 0, 166, 144)));
-	dieFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/die/18.png", Rect(0, 0, 166, 144)));
-	dieFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/die/19.png", Rect(0, 0, 166, 144)));
-	dieFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/die/20.png", Rect(0, 0, 166, 144)));
+	for (int i = 1; i < 20+1; i++)
+	{
+		std::string num = std::to_string(i);
+		dieFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/die/" + num + ".png", Rect(0, 0, 166, 144)));
+	}
 }
 bool zombie::judge_eat()
 {
@@ -212,88 +191,7 @@ void zombie::stopmusic()
 	audio->stopEffect(eat_music);
 }
 
-/*以上为僵尸基类的函数实现*/
-flag_zombie::flag_zombie(Sprite* outside_sprite, double outside_line) :zombie(outside_sprite, outside_line)
-{
-	speed = 20;         /*设置速度*/
-	type = 1;          /*旗帜僵尸标识*/
-	init_animate();
-	move();
-}
-void flag_zombie::init_eat_animate()
-{
-	eatFrames.clear();
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/Flag/eat/1.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/Flag/eat/2.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/Flag/eat/3.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/Flag/eat/4.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/Flag/eat/5.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/Flag/eat/6.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/Flag/eat/7.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/Flag/eat/8.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/Flag/eat/9.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/Flag/eat/10.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/Flag/eat/11.png", Rect(0, 0, 166, 144)));
-}
-void flag_zombie::init_move_animate()
-{
-	moveFrames.clear();
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Flag/move/1.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Flag/move/2.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Flag/move/3.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Flag/move/4.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Flag/move/5.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Flag/move/6.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Flag/move/7.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Flag/move/8.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Flag/move/9.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Flag/move/10.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Flag/move/11.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Flag/move/12.png", Rect(0, 0, 166, 144)));
-}
-/*以上为旗帜僵尸函数实现*/
 
-Buckethead_zombie::Buckethead_zombie(Sprite* outside_sprite, double outside_line):zombie(outside_sprite, outside_line)
-{
-	blood = 3600;      /*设置血量*/
-	type = 2;            /*铁通僵尸标识*/
-	init_animate();
-	move();
-}
-void Buckethead_zombie::init_eat_animate()
-{
-	eatFrames.clear();
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/eat/1.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/eat/2.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/eat/3.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/eat/4.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/eat/5.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/eat/6.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/eat/7.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/eat/8.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/eat/9.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/eat/10.png", Rect(0, 0, 166, 144)));
-	eatFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/eat/11.png", Rect(0, 0, 166, 144)));
-}
-void Buckethead_zombie::init_move_animate()
-{
-	moveFrames.clear();
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/move/1.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/move/2.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/move/3.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/move/4.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/move/5.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/move/6.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/move/7.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/move/8.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/move/9.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/move/10.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/move/11.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/move/12.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/move/13.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/move/14.png", Rect(0, 0, 166, 144)));
-	moveFrames.pushBack(SpriteFrame::create("pictures/zombie/Buckethead/move/15.png", Rect(0, 0, 166, 144)));
-}
 
 
 
