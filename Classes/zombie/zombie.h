@@ -16,8 +16,9 @@ protected:
     Vector<SpriteFrame*> dieFrames;
     int eat_num;
     int move_num;
-public:
     std::string FrameDir;
+    int interval = 120;
+public:
     int type;
     double blood = 1200;
     Sprite* sprite;
@@ -25,7 +26,6 @@ public:
     int die_time = 1*60;       /*死亡动画播放时间*/
     int line;             /*纪录生成的行数*/
     int row;
-    int interval = 120;
     bool is_move=0;
     bool is_eat=0;
     bool is_die=0;

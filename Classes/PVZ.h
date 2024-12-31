@@ -14,6 +14,7 @@
 #include<zombie/zombie.h>
 #include<select/select.h>
 #include "editor-support/cocostudio/SimpleAudioEngine.h"
+#include<LevelState/LevelState.h>
 using namespace CocosDenshion;
 USING_NS_CC;
 #define LINE_1 470.0
@@ -40,8 +41,13 @@ USING_NS_CC;
 #define SUN_START 700.0  /*太阳掉落时的初始位置*/
 #define BULLET_SHOOT 4*60
 #define SUNFLOWER_CREATE 20*60
-#define SUN_CREAT 12*60
+#define SUN_CREATE 12*60
 #define ZOMBIE_CREATE 20*60
+
+
+#define SUN_DURATION  5*60
+#define READY_DURATION 6*60
+#define FLUSH_DURATION 4*60*60 + READY_DURATION
 /*以上为相应动作时间间隔*/
 class PVZ : public cocos2d::Scene
 {

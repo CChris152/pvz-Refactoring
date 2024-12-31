@@ -191,10 +191,6 @@ void zombie::stopmusic()
 	audio->stopEffect(eat_music);
 }
 
-
-
-
-
 /*Refectoring*/
 void zombie::setBasic(std::string FrameDir, int speed, double blood, int type,int eat_num,int move_num)
 {

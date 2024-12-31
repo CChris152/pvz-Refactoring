@@ -9,8 +9,6 @@ class Factory  //工厂基类
 {
 public:
 	static Sprite* add_sprite(cocos2d::Node* parent,int layer);
-    
-    
 };
 class ZombieFactory:Factory  //僵尸工厂
 {

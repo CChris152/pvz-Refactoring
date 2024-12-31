@@ -103,7 +103,6 @@ bool Level::init()
 	visibleSize = Director::getInstance()->getVisibleSize(); /*获取窗口大小*/
 	loadResoure();
 	this->scheduleUpdate();
-	ZombieFactory::add_buckethead_zombie(LINE_3, this);
 	return true;
 }
 void Level::loadResoure()
@@ -182,7 +181,7 @@ void Level::addloadingBar()
 	head->setPosition(Vec2(880, 10));
 	this->addChild(head, 5);
 
-	auto moveBy = MoveBy::create(time/60, Vec2(-120, 0));   
+	auto moveBy = MoveBy::create(FLUSH_DURATION/60, Vec2(-120, 0));   
 	/*因为初始化时执行动作，所以这里可以直接使用总时间/60(这里的单位是秒，头文件里time的单位是帧)来移动*/
 	head->runAction(moveBy);
 
@@ -513,55 +512,13 @@ bool Level::touch_exitButton_end(Touch* t, Event* e)
 	return false;
 }
 
-void Level::addstopButton()      /*添加退出按钮*/
-{
-	stopButton = Sprite::create("pictures/icon/stop.png");
-	stopButton->setPosition(Vec2(700, 550));
-	addChild(stopButton, 1);
-	init_stopButton_event();
-}
-void Level::init_stopButton_event()      /*创建退出监听器*/
-{
-	auto stopListener = EventListenerTouchOneByOne::create();
-	stopListener->onTouchBegan = CC_CALLBACK_2(Level::touch_stopButton_began, this);
-	stopListener->onTouchEnded = CC_CALLBACK_2(Level::touch_stopButton_end, this);
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(stopListener, stopButton);
-}
-bool Level::touch_stopButton_began(Touch* t, Event* e)
-{
-	Vec2 pt = t->getLocation();      /*得到当前坐标*/
-	auto sprite = static_cast<Sprite*>(e->getCurrentTarget());       /*取得当前坐标的对象*/
-	if (sprite->getBoundingBox().containsPoint(pt))
-	{
-		sprite->setTexture("pictures/icon/stop_select.png"); /*将图片变为选择状态*/
-		return true;
-	}
-	return false;
-}
-bool Level::touch_stopButton_end(Touch* t, Event* e)
-{
-	Vec2 pt = t->getLocation();
-	auto sprite = static_cast<Sprite*>(e->getCurrentTarget());
-	if (sprite->getBoundingBox().containsPoint(pt))
-	{
-		sprite->setTexture("pictures/icon/stop.png"); /*将图片变为未选择状态*/
-		stop();
-		return true;
-	}
-	sprite->setTexture("pictures/icon/stop.png"); /*将图片变为未选择状态*/
-	return false;
-}
 /*可点击精灵相应函数如上*/
 /*以上为调试工具*/
-void Level::addsun()
+void Level::back_to_select()
 {
-	auto s = Sprite::create("pictures/sun.png");
-	sun* a = new sun(s);
-	all_sun.push_back(a);
-	addChild(s, 5);
-	int x = 70 + rand() % 735;   /*控制生成横位置在[70,805)*/
-	s->setPosition(x, SUN_START);
-	a->fall();   /*执行掉落*/
+	stop_music();
+	auto scene = select::createScene();
+	Director::getInstance()->replaceScene(scene);
 }
 void Level::addzombie()
 {
@@ -572,254 +529,17 @@ void Level::addzombie()
 void Level::update(float dt)
 {
 	sun_total->setString(StringUtils::format("%d", total));   /*刷新太阳总数*/
-	gaming();       /*进行游戏*/
-}
-void Level::back_to_select()
-{
-	stop_music();
-	auto scene = select::createScene();
-	Director::getInstance()->replaceScene(scene);
-}
-void Level::play_first_music()
-{
-	auto audio = SimpleAudioEngine::getInstance();
-	audio->playEffect("Music/zombie_comming.mp3", false);   /*单次播放*/
-}
-void Level::game_fail()
-{
-	stop();
-	auto audio = SimpleAudioEngine::getInstance();
-	audio->playBackgroundMusic("Music/losemusic.mp3", false);  
-	/*失败音乐播放*/
-
-	auto sprite = Sprite::create("pictures/icon/fail.png");
-	this->addChild(sprite, 5);
-	sprite->setPosition(Vec2(400, 350));
-	auto label=Label::createWithTTF("PRESS TO BACK THE MENU", "fonts/Marker Felt.ttf", 50);
-	label->setTextColor(Color4B::BLACK);
-	label->setPosition(400, 100);
-	this->addChild(label, 5);
-	/*失败图标创建*/
-
-	auto listener = EventListenerTouchOneByOne::create(); 
-	/*创建监听器*/
-	listener->onTouchBegan = [&](Touch* t, Event* e)    /*随便点击就退出*/
+	//gaming();       /*进行游戏*/
+	time++;
+	CCLOG("time:%d", time);
+	if (current_state)
 	{
-		back_to_select();
-		return true; 
-	};
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener,label);
-}
-bool Level::judge_fail()
-{
-	/*因为没有安排速度更快的僵尸，所以每一行vector的第一个元素一定是位置最前的僵尸，只需检测0位置的僵尸位置即可*/
-	std::vector<zombie*>::iterator it;
-	it = line_1.begin();
-	if (line_1.size()!=0)
-	{
-		if ((*it)->position.x <= END_POSITION)
-			return true;
+		current_state->handle(this);
 	}
-	it = line_2.begin();
-	if (line_2.size() != 0)
-	{
-		if ((*it)->position.x <= END_POSITION)
-			return true;
-	}
-	it = line_3.begin();
-	if (line_3.size() != 0)
-	{
-		if ((*it)->position.x <= END_POSITION)
-			return true;
-	}
-	it = line_4.begin();
-	if (line_4.size() != 0)
-	{
-		if ((*it)->position.x <= END_POSITION)
-			return true;
-	}
-	it = line_5.begin();
-	if (line_5.size() != 0)
-	{
-		if ((*it)->position.x <= END_POSITION)
-			return true;
-	}
-	return false;
-}
-void Level::game_win()
-{
-	set_level_ready();
-	if (!(is_win_play))
-	{
-		auto audio = SimpleAudioEngine::getInstance();   /*胜利音乐播放*/
-		audio->stopAllEffects();
-		audio->playEffect("Music/winmusic.mp3", false);
-		is_win_play = 1;
-
-		auto label = Label::createWithTTF("You Win!!!", "fonts/Marker Felt.ttf", 80); 
-		label->setTextColor(Color4B::BLACK);
-		label->setPosition(400, 300);
-		this->addChild(label, 5);
-		auto label2 = Label::createWithTTF("You have a new plant in next level", "fonts/Marker Felt.ttf", 60);
-		label2->setTextColor(Color4B::BLACK);
-		label2->setPosition(400, 100);
-		this->addChild(label2, 5);
-		/*获胜图标创建*/
-	}
-	else if (win_time != 0)     /*纪录播放时间，播放完了再切换到选关界面*/
-		win_time--;
-	else
-		back_to_select();
-}
-void Level::gaming()
-{
-	if (judge_fail())    /*判断是否结束游戏*/
-		game_fail();
-	sun_interval--;
-	if (ready_interval > 0)
-		ready_interval--;
-	if (ready_interval == 0)    /*准备时间结束时播放音乐*/
-	{
-		play_first_music();
-		ready_interval--;
-	}
-	if (sun_interval == 0)   /*周期性产生阳光*/
-	{
-		sun_interval = SUN_CREAT;   /*重置一下数字*/
-		addsun(); 
-	}
-	if(time!=0)
-	{
-		if(ready_interval<0)          /*准备时间后才开始周期性释放僵尸*/
-			zombie_interval--;          /*在到达最后时间点前才产生僵尸*/
-		time--;              /*在到达最后时间点前每次update都减少时间*/
-	}
-	if (zombie_interval == 0&&time!=0)  /*没有一大波僵尸前周期性产生僵尸*/
-	{
-		int num = rand() % 101;    /*取值为[0,100]*/
-		if (num > per)              /*调整一下一次出怪数量的概率 不然运气太差了都刷2，不用玩了*/
-			num = 1;
-		else
-			num = 2;
-		addzombie();               /*无论生成的僵尸是多少个，都要生成一个僵尸*/
-		if(num==1)
-			zombie_interval = ZOMBIE_CREATE;  /*重置一下数字*/
-		else
-			zombie_interval = 1*60;  
-		/*将生成间隔置为1秒，来实现单次生成的间隔，当然如果一直刷到是2就只能说他运气差*/
-	}
-	if (time == 0)
-		flush();            /*当波次到达时放出一大波僵尸*/
-	if (time == 0 
-		&& is_flush==1
-		&& line_1.size() == 0
-		&& line_2.size() == 0
-		&& line_3.size() == 0
-		&& line_4.size() == 0
-		&& line_5.size() == 0) /*当最后一波执行之后而且当前僵尸都杀完后，判断为游戏胜利*/
-		game_win();
 }
 void Level::flush()
 {
 
-	if (flush_time != 0)
-	{
-		if (flush_time % 100 == 0)
-		{
-			int tmp_line = rand() % 5 + 1; /*在五行里随机产生僵尸*/
-			switch (tmp_line)
-			{
-			case 1:
-				if (flush_time == 2000)   /*生成旗帜僵尸*/
-				{
-					ZombieFactory::add_flag_zombie(LINE_1, this);
-				}
-				if (num_1 <= 6)
-				{                 /*让每一行分配到的僵尸数量都平均一点*/
-					num_1++;
-					if (Buckethead_num != 0)     /*添加铁通僵尸*/
-					{
-						ZombieFactory::add_buckethead_zombie(LINE_1, this);
-						Buckethead_num--;
-					}
-					else
-						ZombieFactory::add_normal_zombie(LINE_1, this);
-				}
-				break;
-			case 2:
-				if (flush_time == 2000)   /*生成旗帜僵尸*/
-				{
-					ZombieFactory::add_flag_zombie(LINE_2, this);
-				}
-				if (num_2 <= 6)
-				{                 /*让每一行分配到的僵尸数量都平均一点*/
-					num_2++;
-					if (Buckethead_num != 0)     /*添加铁通僵尸*/
-					{
-						ZombieFactory::add_buckethead_zombie(LINE_2, this);
-						Buckethead_num--;
-					}
-					else
-						ZombieFactory::add_normal_zombie(LINE_2, this);
-				}
-				break;
-			case 3:
-				if (flush_time == 2000)   /*生成旗帜僵尸*/
-				{
-					ZombieFactory::add_flag_zombie(LINE_3, this);
-				}
-				if (num_3 <= 6)
-				{                 /*让每一行分配到的僵尸数量都平均一点*/
-					num_3++;
-					if (Buckethead_num != 0)     /*添加铁通僵尸*/
-					{
-						ZombieFactory::add_buckethead_zombie(LINE_3, this);
-						Buckethead_num--;
-					}
-					else
-						ZombieFactory::add_normal_zombie(LINE_3, this);
-				}
-				break;
-			case 4:
-				if (flush_time == 2000)   /*生成旗帜僵尸*/
-				{
-					ZombieFactory::add_flag_zombie(LINE_4, this);
-				}
-				if (num_4 <= 6)
-				{                 /*让每一行分配到的僵尸数量都平均一点*/
-					num_4++;
-					if (Buckethead_num != 0)     /*添加铁通僵尸*/
-					{
-						ZombieFactory::add_buckethead_zombie(LINE_4, this);
-						Buckethead_num--;
-					}
-					else
-						ZombieFactory::add_normal_zombie(LINE_4, this);
-				}
-				break;
-			case 5:
-				if (flush_time == 2000)   /*生成旗帜僵尸*/
-				{
-					ZombieFactory::add_flag_zombie(LINE_5, this);
-				}
-				if (num_5 <= 6)
-				{                 /*让每一行分配到的僵尸数量都平均一点*/
-					num_5++;
-					if (Buckethead_num != 0)     /*添加铁通僵尸*/
-					{
-						ZombieFactory::add_buckethead_zombie(LINE_5, this);
-						Buckethead_num--;
-					}
-					else
-						ZombieFactory::add_normal_zombie(LINE_5, this);
-				}
-				break;
-			}
-		}
-		flush_time--;
-	}
-	else
-		is_flush = 1;    /*设置为已完全释放该波次*/
 }
 void Level::stop()
 {
@@ -895,7 +615,6 @@ void Level::stop_music()
 	audio->stopAllEffects();
 }
 /*以上为关卡基类所用函数*/
-
 
 Scene* Level_1::createScene()
 {
@@ -1127,3 +846,16 @@ void Level_2::set_level_ready()
 	UserDefault::getInstance()->setBoolForKey("level_2_ready", 1);
 }
 /*以上为关卡二的重写函数实现*/
+
+/*refectoring*/
+void Level::setState(LevelState* state)
+{
+	delete current_state;
+	current_state = state;
+	
+}
+
+int Level::getTime()
+{
+	return time;
+}
