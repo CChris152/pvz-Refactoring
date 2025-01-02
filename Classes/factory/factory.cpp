@@ -112,3 +112,4 @@ void PlantFactory::add_potatoMine(int row, int line, cocos2d::Node* parent)
 	mine->setBasic("pictures/plant/potato_mine/", 8);
 	load(row, line, mine);
 }
+

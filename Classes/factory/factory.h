@@ -1,9 +1,9 @@
 #pragma once
-#include"cocos2d.h"
+#include <unordered_map>
 #include<zombie/zombie.h>
+#include"cocos2d.h"
 #include "ui/CocosGUI.h"
 USING_NS_CC;
-
 
 class Factory  //工厂基类
 {

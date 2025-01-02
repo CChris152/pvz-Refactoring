@@ -41,11 +41,7 @@ protected:
     bool is_win_play = 0;           /*标识胜利动画是否播放*/
     bool is_flush = 0;        /*用于判断当前波次是否释放完全*/
     LevelState* current_state = new ReadyState();
-private:
-    int time = 0;
-public:
-    ~Level();
-    void setState(LevelState* state);
+
 
     void off_car();
     void off_sun();
@@ -53,16 +49,13 @@ public:
     void off_plant_schedule();
     void off_bullet_schedule();
     /*析构相关函数如上*/
-    static cocos2d::Scene* createScene();
-    virtual bool init();
-    virtual void loadResoure();         /*加载所有精灵成员*/
     void addbackground();
     void addloadingBar();
     virtual void addcard();      /*不同关卡可用卡片不同，继承类进行重写*/
     void addlabel();
-     void addshop();            /*加载商店*/
-     void addcar();
-     void addmusic();
+    void addshop();            /*加载商店*/
+    void addcar();
+    void addmusic();
     void addshovel();
     void init_shovel();
     bool touch_shovel_began(Touch* t, Event* e);
@@ -75,34 +68,33 @@ public:
     /*退出选项相关函数如上*/
 
     /*菜单选项相关函数如上*/
-
-    /*初始化相关函数如上*/
-
-    virtual void update(float dt);
-    
-    void addzombie();    /*这个是周期性添加僵尸的函数，不是单独加僵尸的函数*/
     virtual void flush();        /*一大波僵尸来时进行的操作*/
-    void back_to_select();
 
     /*以上为动态添加单位函数*/
-    virtual void set_level_ready() {};  /*完成关卡时用于纪录胜利情况*/
     bool is_in_board(Vec2 pt);
     bool is_empty(Vec2 pt);
 
-    void stop();
     void stop_plant();
     void stop_bullet();
     void stop_sun();
     void stop_zombie();
     void stop_music();
-
-
-
+private:
+    int time = 0;
+public:
+    ~Level();
+    virtual void set_level_ready() {};  /*完成关卡时用于纪录胜利情况*/
+    void stop();
+    void addzombie();    /*这个是周期性添加僵尸的函数，不是单独加僵尸的函数*/
+    void back_to_select();
+    void setState(LevelState* state);
+    static cocos2d::Scene* createScene();
+    virtual bool init();
+    virtual void loadResoure();         /*加载所有精灵成员*/
+    /*初始化相关函数如上*/
+    virtual void update(float dt);
     /*refectoring*/
     int getTime();
-    
-
-
     /*游戏进行函数如上*/
     CREATE_FUNC(Level);
 };

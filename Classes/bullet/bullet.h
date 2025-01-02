@@ -1,19 +1,22 @@
 #pragma once
 #include"cocos2d.h"
+class zombie;
 USING_NS_CC;
-class bullet :public Sprite
+class Bullet :public Sprite
 {
-    double attack = 300;
-    Vec2 position;
-    int line;
-public:
+private:
+    std::vector<zombie*>* current_line = nullptr;
     Sprite* sprite;
-    bullet(Sprite* outside_sprite);
-    ~bullet();
-    virtual void update(float dt);
-    void move();
-    void hit_music();
-    void hit_Buckethead_music();
+    int line;
+    Vec2 position;
+    double attack = 300;
+    void is_zombie();
     void get_line();
-    void is_zombie();        /*判断周围有没有僵尸*/
+    void move();
+    void playHitSound(int type);
+public:
+    Bullet(cocos2d::Node * parent);
+    ~Bullet();
+    virtual void update(float dt);
+    void load(Vec2 position);
 };

@@ -1,5 +1,6 @@
 #pragma once
 #include"cocos2d.h"
+class zombie;
 USING_NS_CC;
 class Plant :public Sprite
 {
@@ -7,8 +8,8 @@ class Plant :public Sprite
     bool is_wait;
     int wait_num;
 protected:
+    std::vector<zombie*>* current_line = nullptr;
     int interval;
-
     Vector<SpriteFrame*> waitFrames;
     std::string FrameDir;
 public:

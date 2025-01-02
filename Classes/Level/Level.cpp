@@ -14,8 +14,8 @@ Level::~Level()
 	line_3.clear();
 	line_4.clear();
 	line_5.clear();
-	all_bullet.clear();
 	all_sun.clear();
+	all_bullet.clear();
 	total = 0;
 
 }
@@ -69,12 +69,7 @@ void Level::off_zombie_schedule()
 }
 void Level::off_bullet_schedule()
 {
-	std::vector<bullet*>::iterator it = all_bullet.begin();
-	for (; it != all_bullet.end(); it++)
-	{
-		(*it)->unscheduleUpdate();
-		delete* it;
-	}
+
 }
 void Level::off_plant_schedule()
 {
@@ -102,6 +97,7 @@ bool Level::init()
 	}
 	visibleSize = Director::getInstance()->getVisibleSize(); /*获取窗口大小*/
 	loadResoure();
+	this->setState(new FlushState());
 	this->scheduleUpdate();
 	return true;
 }
@@ -529,9 +525,6 @@ void Level::addzombie()
 void Level::update(float dt)
 {
 	sun_total->setString(StringUtils::format("%d", total));   /*刷新太阳总数*/
-	//gaming();       /*进行游戏*/
-	time++;
-	CCLOG("time:%d", time);
 	if (current_state)
 	{
 		current_state->handle(this);
@@ -546,6 +539,7 @@ void Level::stop()
 	stop_plant();
 	stop_zombie();
 	stop_music();
+	stop_bullet();
 	this->unscheduleUpdate();   /*把定时器关了防止阳光继续生成*/
 }
 void Level::stop_plant()
@@ -564,11 +558,10 @@ void Level::stop_plant()
 }
 void Level::stop_bullet()
 {
-	std::vector<bullet*>::iterator it = all_bullet.begin();
-	for (; it != all_bullet.end(); it++)
+	std::vector<Bullet*>::iterator it;
+	for (it = all_bullet.begin(); it != all_bullet.end(); it++)
 	{
 		(*it)->unscheduleUpdate();
-		(*it)->sprite->stopAllActions();
 	}
 }
 void Level::stop_zombie()

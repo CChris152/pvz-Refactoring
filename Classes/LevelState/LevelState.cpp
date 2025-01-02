@@ -89,108 +89,34 @@ void GamingState::add_sun(Level* level)
 }
 void FlushState::handle(Level* level)
 {
-	if (flush_time != 0)
-	{
-		if (flush_time % 100 == 0)
-		{
-			int tmp_line = rand() % 5 + 1; /*在五行里随机产生僵尸*/
-			switch (tmp_line)
-			{
-			case 1:
-				if (flush_time == 2000)   /*生成旗帜僵尸*/
-				{
-					ZombieFactory::add_flag_zombie(LINE_1, level);
+	if (flush_time != 0) {
+		if (flush_time % 100 == 0) {
+			int tmp_line = rand() % 5 + 1; // 随机选择行
+			int line = tmp_line - 1; // 将行号转换为索引
+
+			if (flush_time == 3000) { // 生成特殊僵尸
+				ZombieFactory::add_flag_zombie(470-line*100, level);
+			}
+			// 使用数组来存储每行的计数器
+			int* num_array[] = { &num_1, &num_2, &num_3, &num_4, &num_5 };
+			if (*num_array[line] <= 6) { // 检查是否达到上限
+				(*num_array[line])++;
+				if (Buckethead_num != 0) { // 检查是否有桶头僵尸
+					ZombieFactory::add_buckethead_zombie(470 - line * 100, level);
+					Buckethead_num--;
 				}
-				if (num_1 <= 6)
-				{                 /*让每一行分配到的僵尸数量都平均一点*/
-					num_1++;
-					if (Buckethead_num != 0)     /*添加铁通僵尸*/
-					{
-						ZombieFactory::add_buckethead_zombie(LINE_1, level);
-						Buckethead_num--;
-					}
-					else
-						ZombieFactory::add_normal_zombie(LINE_1, level);
+				else {
+					ZombieFactory::add_normal_zombie(470 - line * 100, level);
 				}
-				break;
-			case 2:
-				if (flush_time == 2000)   /*生成旗帜僵尸*/
-				{
-					ZombieFactory::add_flag_zombie(LINE_2, level);
-				}
-				if (num_2 <= 6)
-				{                 /*让每一行分配到的僵尸数量都平均一点*/
-					num_2++;
-					if (Buckethead_num != 0)     /*添加铁通僵尸*/
-					{
-						ZombieFactory::add_buckethead_zombie(LINE_2, level);
-						Buckethead_num--;
-					}
-					else
-						ZombieFactory::add_normal_zombie(LINE_2, level);
-				}
-				break;
-			case 3:
-				if (flush_time == 2000)   /*生成旗帜僵尸*/
-				{
-					ZombieFactory::add_flag_zombie(LINE_3, level);
-				}
-				if (num_3 <= 6)
-				{                 /*让每一行分配到的僵尸数量都平均一点*/
-					num_3++;
-					if (Buckethead_num != 0)     /*添加铁通僵尸*/
-					{
-						ZombieFactory::add_buckethead_zombie(LINE_3, level);
-						Buckethead_num--;
-					}
-					else
-						ZombieFactory::add_normal_zombie(LINE_3, level);
-				}
-				break;
-			case 4:
-				if (flush_time == 2000)   /*生成旗帜僵尸*/
-				{
-					ZombieFactory::add_flag_zombie(LINE_4, level);
-				}
-				if (num_4 <= 6)
-				{                 /*让每一行分配到的僵尸数量都平均一点*/
-					num_4++;
-					if (Buckethead_num != 0)     /*添加铁通僵尸*/
-					{
-						ZombieFactory::add_buckethead_zombie(LINE_4, level);
-						Buckethead_num--;
-					}
-					else
-						ZombieFactory::add_normal_zombie(LINE_4, level);
-				}
-				break;
-			case 5:
-				if (flush_time == 2000)   /*生成旗帜僵尸*/
-				{
-					ZombieFactory::add_flag_zombie(LINE_5, level);
-				}
-				if (num_5 <= 6)
-				{                 /*让每一行分配到的僵尸数量都平均一点*/
-					num_5++;
-					if (Buckethead_num != 0)     /*添加铁通僵尸*/
-					{
-						ZombieFactory::add_buckethead_zombie(LINE_5, level);
-						Buckethead_num--;
-					}
-					else
-						ZombieFactory::add_normal_zombie(LINE_5, level);
-				}
-				break;
 			}
 		}
 		flush_time--;
 	}
-	else if(line_1.size()==0
-		&& line_2.size() == 0
-		&& line_3.size() == 0
-		&& line_4.size() == 0
-		&& line_5.size() == 0)/*当最后一波执行之后而且当前僵尸都杀完后，判断为游戏胜利*/
+	else if (line_1.empty() && line_2.empty() && line_3.empty() && line_4.empty() && line_5.empty()) {
+		// 检查是否所有行都没有僵尸
 		level->setState(new WinState());
+	}
+
 }
 void FailState::handle(Level* level)
 {
@@ -218,8 +144,6 @@ void FailState::handle(Level* level)
 	level->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, label);
 	
 }
-
-
 void WinState::handle(Level* level)
 {
 	level->set_level_ready();

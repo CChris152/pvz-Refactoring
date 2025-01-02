@@ -27,6 +27,14 @@ void Plant ::loadResource()
 	position = sprite->getPosition();
 	row = static_cast<int>((position.x - 125) / 85);  /*固定位置放置取值很固定，无需考虑四舍五入*/
 	line = static_cast<int>((470 - position.y) / 100);
+	switch (line)
+	{
+	case 0: current_line = &line_1; break;
+	case 1: current_line = &line_2; break;
+	case 2: current_line = &line_3; break;
+	case 3: current_line = &line_4; break;
+	case 4: current_line = &line_5; break;
+	}
 	init_wait_animate();
 	wait();
 }
@@ -54,32 +62,13 @@ BulletShooter::BulletShooter(Sprite* sprite) :Plant(sprite)
 }
 void BulletShooter::shoot()
 {
-	auto bullet_sprite = Sprite::create("pictures/bullet/pea.png");
-	(sprite->getParent())->addChild(bullet_sprite, 3);  /*从sprite中获取其父母，将子弹添加到其子女中*/
-	bullet_sprite->setPosition(Vec2(position.x + 20, position.y + 13));
-	bullet* pea = new bullet(bullet_sprite);
-	all_bullet.push_back(pea);
+	auto bullet = new Bullet(sprite->getParent());
+	bullet->load(Vec2(position.x + 20, position.y + 13));
+	all_bullet.push_back(bullet);
 }
 void BulletShooter::update(float dt)
 {
-	switch (line)      /*根据行数得到对应行上的僵尸数量*/
-	{
-	case 0:
-		size = line_1.size();
-		break;
-	case 1:
-		size = line_2.size();
-		break;
-	case 2:
-		size = line_3.size();
-		break;
-	case 3:
-		size = line_4.size();
-		break;
-	case 4:
-		size = line_5.size();
-		break;
-	}
+	size = current_line->size();
 	if (size != 0)       /*这一行上*/
 		interval--;
 	if (interval == 0)
