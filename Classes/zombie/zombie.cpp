@@ -41,11 +41,10 @@ void Zombie::update(float dt)
 		if(die_time==0)/*动画执行完毕*/
 		    die();
 	}
-	if (row >= 0)   /*走到方格外就不检测了，不然会越界*/
+	else if (row >= 0)   /*走到方格外就不检测了，不然会越界*/
 	{
 		judge_eat();
 	}
-
 }
 void Zombie::die()
 {

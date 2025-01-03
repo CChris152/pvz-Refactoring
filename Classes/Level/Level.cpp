@@ -19,6 +19,16 @@ Level::~Level()
 	total = 0;
 
 }
+template <typename T>
+void Level::off_schedule(std::vector<T*>& vec) {
+	for (auto it = vec.begin(); it != vec.end(); it++) {
+		if (*it != nullptr) {
+			(*it)->unscheduleUpdate();
+			delete (*it);
+		}
+	}
+	vec.clear();
+}
 void Level::off_car()
 {
 	for (int i=0; i<5; i++)
@@ -31,45 +41,19 @@ void Level::off_car()
 }
 void Level::off_sun()
 {
-	std::vector<sun*>::iterator it;
-	for (it = sunPool.begin(); it != sunPool.end(); it++)
-	{
-		(*it)->unscheduleUpdate();
-		delete (*it);
-	}
+	off_schedule(sunPool);
 }
 void Level::off_zombie_schedule()
 {
-	std::vector<Zombie*>::iterator it;
-	for (it = line_1.begin(); it != line_1.end(); it++)   /*关闭所有的定时器，并删除分配好的内存*/
-	{
-		(*it)->unscheduleUpdate();
-		delete (*it);
-	}
-	for (it = line_2.begin(); it != line_2.end(); it++)   /*关闭所有的定时器，并删除分配好的内存*/
-	{
-		(*it)->unscheduleUpdate();
-		delete (*it);
-	}
-	for (it = line_3.begin(); it != line_3.end(); it++)   /*关闭所有的定时器，并删除分配好的内存*/
-	{
-		(*it)->unscheduleUpdate();
-		delete (*it);
-	}
-	for (it = line_4.begin(); it != line_4.end(); it++)   /*关闭所有的定时器，并删除分配好的内存*/
-	{
-		(*it)->unscheduleUpdate();
-		delete (*it);
-	}
-	for (it = line_5.begin(); it != line_5.end(); it++)   /*关闭所有的定时器，并删除分配好的内存*/
-	{
-		(*it)->unscheduleUpdate();
-		delete (*it);
-	}
+	off_schedule(line_1);
+	off_schedule(line_2);
+	off_schedule(line_3);
+	off_schedule(line_4);
+	off_schedule(line_5);
 }
 void Level::off_bullet_schedule()
 {
-
+	off_schedule(all_bullet);
 }
 void Level::off_plant_schedule()
 {
@@ -109,10 +93,10 @@ void Level::loadResoure()
 	addcard();
 	addloadingBar();
 	addexitButton();
-	/*	addstopButton();*/
 	addlabel();
 	addshovel();
 	addmusic();
+
 }
 void Level::addbackground()
 {
@@ -135,37 +119,10 @@ void Level::addshop()
 }
 void Level::addcard()
 {
-
-	/*
-	bullet_shooter_card.sprite = Sprite::create("pictures/card/bullets_shooter.png");
-	addChild(bullet_shooter_card.sprite, 2);
-	bullet_shooter_card.card_init();
-	*/
-	/*豌豆射手卡片添加*/
-
-	/*
-		Sunflower_Card.sprite = Sprite::create("pictures/card/sunflower.png");
-	addChild(Sunflower_Card.sprite, 2);
-	Sunflower_Card.card_init();
-	*/
-
-	/*向日葵卡片添加*/
-
-	/*
-		Nut_Card.sprite = Sprite::create("pictures/card/nut.png");
-	addChild(Nut_Card.sprite, 2);
-	Nut_Card.card_init();
-	*/
-
-	/*坚果墙卡片添加*/
-
-	/*
-		Potato_Mine_Card.sprite = Sprite::create("pictures/card/potato_mine.png");
-	addChild(Potato_Mine_Card.sprite, 2);
-	Potato_Mine_Card.card_init();
-	*/
-
-	/*土地雷卡片添加*/
+	bulletShooterCard.card_init(this, new BulletShooterCardBehavior());
+	sunflowerCard.card_init(this, new SunflowerCardBehavior());
+	nutCard.card_init(this, new NutCardBehavior());
+	potatoMineCard.card_init(this, new PotatoMineCardBehavior());
 }
 void Level::addcar()
 {
@@ -189,7 +146,7 @@ void Level::addloadingBar()
 	head->setPosition(Vec2(880, 10));
 	this->addChild(head, 5);
 
-	auto moveBy = MoveBy::create(FLUSH_DURATION/60, Vec2(-120, 0));   
+	auto moveBy = MoveBy::create(135, Vec2(-120, 0));    
 	/*因为初始化时执行动作，所以这里可以直接使用总时间/60(这里的单位是秒，头文件里time的单位是帧)来移动*/
 	head->runAction(moveBy);
 
@@ -204,8 +161,6 @@ void Level::addmusic()
 	auto audio = SimpleAudioEngine::getInstance();
 	audio->playBackgroundMusic("Music/gaming.mp3", true);  /*设置为true，重复播放*/
 }
-
-
 void Level::addshovel()
 {
 	shovel = Sprite::create("pictures/icon/shovel.png");
@@ -316,7 +271,7 @@ bool Level::touch_exitButton_end(Touch* t, Event* e)
 }
 
 /*可点击精灵相应函数如上*/
-/*以上为调试工具*/
+
 void Level::back_to_select()
 {
 	stop_music();
@@ -342,6 +297,7 @@ void Level::flush()
 {
 
 }
+
 void Level::stop()
 {
 	stop_plant();
@@ -424,87 +380,15 @@ Scene* Level_1::createScene()
 void Level_1::addcard()
 {
 	per = 60;
-	flush_time = 1000;
+	flush_time = 2000;
 	Buckethead_num = 0;
 
 	bulletShooterCard.card_init(this, new BulletShooterCardBehavior());
 	sunflowerCard.card_init(this, new SunflowerCardBehavior());
 	/*豌豆射手卡片添加*/
 
-    
 	/*向日葵卡片添加*/
 	addcar();
-}
-void Level_1::flush()
-{
-	if (flush_time != 0)
-	{
-		if (flush_time % 100 == 0)
-		{
-			int tmp_line = rand() % 5 + 1; /*在五行里随机产生僵尸*/
-			switch (tmp_line)
-			{
-			case 1:
-				if (flush_time == 1000)   /*生成旗帜僵尸*/
-				{
-					ZombieFactory::add_flag_zombie(LINE_1, this);
-				}
-				if (num_1 <= 2)
-				{                 /*让每一行分配到的僵尸数量都平均一点*/
-					num_1++;
-					ZombieFactory::add_normal_zombie(LINE_1, this);
-				}
-				break;
-			case 2:
-				if (flush_time == 1000)   /*生成旗帜僵尸*/
-				{
-					ZombieFactory::add_flag_zombie(LINE_2, this);
-				}
-				if (num_2 <= 2)
-				{                 /*让每一行分配到的僵尸数量都平均一点*/
-					num_2++;
-					ZombieFactory::add_normal_zombie(LINE_2, this);
-				}
-				break;
-			case 3:
-				if (flush_time == 1000)   /*生成旗帜僵尸*/
-				{
-					ZombieFactory::add_flag_zombie(LINE_3, this);
-				}
-				if (num_3 <= 2)
-				{                 /*让每一行分配到的僵尸数量都平均一点*/
-					num_3++;
-					ZombieFactory::add_normal_zombie(LINE_3, this);
-				}
-				break;
-			case 4:
-				if (flush_time == 1000)   /*生成旗帜僵尸*/
-				{
-					ZombieFactory::add_flag_zombie(LINE_4, this);
-				}
-				if (num_4 <= 2)
-				{                 /*让每一行分配到的僵尸数量都平均一点*/
-					num_4++;
-					ZombieFactory::add_normal_zombie(LINE_4, this);
-				}
-				break;
-			case 5:
-				if (flush_time == 1000)   /*生成旗帜僵尸*/
-				{
-					ZombieFactory::add_flag_zombie(LINE_5, this);
-				}
-				if (num_5 <= 2)
-				{                 /*让每一行分配到的僵尸数量都平均一点*/
-					num_5++;
-					ZombieFactory::add_normal_zombie(LINE_5, this);
-				}
-				break;
-			}
-		}
-		flush_time--;
-	}
-	else
-		is_flush = 1;    /*设置为已完全释放该波次*/
 }
 void Level_1::set_level_ready()
 {
@@ -520,109 +404,8 @@ void Level_2::addcard()
 {
 	bulletShooterCard.card_init(this, new BulletShooterCardBehavior());
 	sunflowerCard.card_init(this, new SunflowerCardBehavior());
-	
+	nutCard.card_init(this, new NutCardBehavior());
 	addcar();
-}
-void Level_2::flush()
-{
-	if (flush_time != 0)
-	{
-		if (flush_time % 100 == 0)
-		{
-			int tmp_line = rand() % 5 + 1; /*在五行里随机产生僵尸*/
-			switch (tmp_line)
-			{
-			case 1:
-				if (flush_time == 1500)   /*生成旗帜僵尸*/
-				{
-					ZombieFactory::add_flag_zombie(LINE_1, this);
-				}
-				if (num_1 <= 4)
-				{                 /*让每一行分配到的僵尸数量都平均一点*/
-					num_1++;
-					if (Buckethead_num != 0)     /*添加铁通僵尸*/
-					{
-						ZombieFactory::add_buckethead_zombie(LINE_1, this);
-						Buckethead_num--;
-					}
-					else
-						ZombieFactory::add_normal_zombie(LINE_1, this);
-				}
-				break;
-			case 2:
-				if (flush_time == 1500)   /*生成旗帜僵尸*/
-				{
-					ZombieFactory::add_flag_zombie(LINE_2, this);
-				}
-				if (num_2 <= 4)
-				{                 /*让每一行分配到的僵尸数量都平均一点*/
-					num_2++;
-					if (Buckethead_num != 0)     /*添加铁通僵尸*/
-					{
-						ZombieFactory::add_buckethead_zombie(LINE_2, this);
-						Buckethead_num--;
-					}
-					else
-						ZombieFactory::add_normal_zombie(LINE_2, this);
-				}
-				break;
-			case 3:
-				if (flush_time == 1500)   /*生成旗帜僵尸*/
-				{
-					ZombieFactory::add_flag_zombie(LINE_3, this);
-				}
-				if (num_3 <= 4)
-				{                 /*让每一行分配到的僵尸数量都平均一点*/
-					num_3++;
-					if (Buckethead_num != 0)     /*添加铁通僵尸*/
-					{
-						ZombieFactory::add_buckethead_zombie(LINE_3, this);
-						Buckethead_num--;
-					}
-					else
-						ZombieFactory::add_normal_zombie(LINE_3, this);
-				}
-				break;
-			case 4:
-				if (flush_time == 1500)   /*生成旗帜僵尸*/
-				{
-					ZombieFactory::add_flag_zombie(LINE_4, this);
-				}
-				if (num_4 <= 4)
-				{                 /*让每一行分配到的僵尸数量都平均一点*/
-					num_4++;
-					if (Buckethead_num != 0)     /*添加铁通僵尸*/
-					{
-						ZombieFactory::add_buckethead_zombie(LINE_4, this);
-						Buckethead_num--;
-					}
-					else
-						ZombieFactory::add_normal_zombie(LINE_4, this);
-				}
-				break;
-			case 5:
-				if (flush_time == 1500)   /*生成旗帜僵尸*/
-				{
-					ZombieFactory::add_flag_zombie(LINE_5, this);
-				}
-				if (num_5 <= 4)
-				{                 /*让每一行分配到的僵尸数量都平均一点*/
-					num_5++;
-					if (Buckethead_num != 0)     /*添加铁通僵尸*/
-					{
-						ZombieFactory::add_buckethead_zombie(LINE_5, this);
-						Buckethead_num--;
-					}
-					else
-						ZombieFactory::add_normal_zombie(LINE_5, this);
-				}
-				break;
-			}
-		}
-		flush_time--;
-	}
-	else
-		is_flush = 1;    /*设置为已完全释放该波次*/
 }
 void Level_2::set_level_ready()
 {

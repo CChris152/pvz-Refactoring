@@ -63,8 +63,6 @@ bool Card::touch_began_select(Touch*t,Event*e)
 	return false;
 }
 
-
-
 void Behavior::load(Sprite*sprite)
 {
 	sprite->setTexture(OriginTexture);

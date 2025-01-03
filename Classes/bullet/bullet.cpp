@@ -28,7 +28,6 @@ Bullet::~Bullet()
 void Bullet::get_line()
 {
 	int i = static_cast<int>((570 - position.y + 13) / 100);
-	/*��13����Ϊ�ӵ���λ�û�ȳ�ʼλ�ø�13���������ܺ��㶹���ֵ���ˮƽ*/
 	line = i;
 
 	switch (line)
@@ -47,8 +46,7 @@ void Bullet::move()
 }
 void Bullet::update(float dt)
 {
-	auto pt = sprite->getPosition();
-	position = pt;
+	position = sprite->getPosition();
 	is_zombie();
 }
 void Bullet::load(Vec2 position)

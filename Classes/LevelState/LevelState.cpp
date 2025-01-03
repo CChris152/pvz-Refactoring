@@ -105,15 +105,6 @@ void GamingState::add_sun(Level* level)
 	int x = 70 + rand() % 735;
 	a->sprite->setPosition(x, SUN_START);
 	a->fall();
-		/*
-			auto s = Sprite::create("pictures/sun.png");
-	sun* a = new sun(s);
-	sunPool.push_back(a);
-	level->addChild(s, 5);
-	int x = 70 + rand() % 735;   
-	s->setPosition(x, SUN_START);
-	a->fall();   
-		*/
 }
 void FlushState::handle(Level* level)
 {

@@ -34,31 +34,24 @@ void sun::update(float dt)
 void sun::init_listener()
 {
 	auto sunListener = EventListenerTouchOneByOne::create();
-	sunListener->onTouchBegan = CC_CALLBACK_2(sun::touch_began, this);
-	sunListener->onTouchEnded = CC_CALLBACK_2(sun::touch_end, this);
+
+	// 使用Lambda表达式简化触摸处理
+	sunListener->onTouchBegan = [](Touch* t, Event* e) {
+		auto sprite = static_cast<Sprite*>(e->getCurrentTarget());
+		return sprite->getBoundingBox().containsPoint(t->getLocation());
+		};
+
+	sunListener->onTouchEnded = [this](Touch* t, Event* e) {
+		auto sprite = static_cast<Sprite*>(e->getCurrentTarget());
+		if (sprite->getBoundingBox().containsPoint(t->getLocation())) {
+			play_music();
+			move();
+			return true;
+		}
+		return false;
+		};
+
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(sunListener, sprite);
-}
-bool sun::touch_began(Touch* t, Event* e)
-{
-	Vec2 pt = t->getLocation();      /*得到当前坐标*/
-	auto now = static_cast<Sprite*>(e->getCurrentTarget());       /*取得当前坐标的对象*/
-	if (now->getBoundingBox().containsPoint(pt))
-	{
-		return true;
-	}
-	return false;
-}
-bool sun::touch_end(Touch* t, Event* e)
-{
-	Vec2 pt = t->getLocation();
-	auto now = static_cast<Sprite*>(e->getCurrentTarget());
-	if (now->getBoundingBox().containsPoint(pt))
-	{
-		play_music();
-		this->move();
-		return true;
-	}
-	return false;
 }
 void sun::play_music()
 {
@@ -76,8 +69,8 @@ void sun::move()
 void sun::create()
 {
 	/*执行阳光被创造时的跳动动作*/
-	auto up = MoveBy::create(2, Vec2(5, 50));
-	auto down = MoveBy::create(2, Vec2(5, -75));
+	auto up = MoveBy::create(1, Vec2(5, 50));
+	auto down = MoveBy::create(1, Vec2(5, -75));
 	auto seq = Sequence::create(up,down, nullptr);
 	sprite->runAction(seq);
 }

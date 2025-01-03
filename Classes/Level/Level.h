@@ -82,6 +82,8 @@ private:
     int time = 0;
 public:
     ~Level();
+    template <typename T>
+    void off_schedule(std::vector<T*>& vec);
     virtual void set_level_ready() {};  /*完成关卡时用于纪录胜利情况*/
     void stop();
     void addzombie();    /*这个是周期性添加僵尸的函数，不是单独加僵尸的函数*/
@@ -102,7 +104,6 @@ class Level_1 :public Level
 {
     void set_level_ready();
     void addcard();
-    void flush();
 public:
     static cocos2d::Scene* createScene();
     CREATE_FUNC(Level_1);
@@ -111,7 +112,6 @@ class Level_2 :public Level
 {
     void set_level_ready();
     void addcard();
-    void flush();
 public:
     static cocos2d::Scene* createScene();
     CREATE_FUNC(Level_2);

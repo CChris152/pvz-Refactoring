@@ -49,9 +49,3 @@ public:
     virtual void init_wait_animate();
     virtual void init_die_animate();
 };
-
-
-
-
-
-/*Refectoring*/

@@ -71,13 +71,6 @@ Sprite *  PlantFactory::add_plant(int row,int line,cocos2d::Node* parent)
 	auto sprite = add_sprite(parent, 2);
 	sprite->setPosition(row * 85 + 125, 470 - line * 100);
 	return sprite;
-	Plant*  plant= new Plant(sprite);
-	plant->setBasic("pictures/plant/bullet_shooter/", 13);
-
-
-	plant->loadResource();
-	board[line][row] = plant;
-	return plant;
 }
 void PlantFactory::load(int row,int line,Plant* plant)
 {

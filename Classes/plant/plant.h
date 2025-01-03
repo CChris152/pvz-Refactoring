@@ -53,8 +53,7 @@ public:
 };
 class PotatoMine :public Plant
 {
-    bool is_ready = 0;
-
+    bool is_ready = false;
     
     void play_music();
     void ready();

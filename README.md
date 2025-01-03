@@ -20,4 +20,6 @@ active object
 使用State进行Level状态进行
 使用Bridge进行card设计
 使用池化技术生成太阳
+使用flyweigth管理纹理
+
 

@@ -53,7 +53,11 @@ void Plant::init_wait_animate()
 		waitFrames.pushBack(SpriteFrame::create(FrameDir+num+".png", Rect(0, 0, 75, 75)));
 	}
 }
-
+void Plant::setBasic(std::string FrameDir, int wait_num)
+{
+	this->FrameDir = FrameDir;
+	this->wait_num = wait_num;
+}
 /*以上为植物基类的函数*/
 
 BulletShooter::BulletShooter(Sprite* sprite) :Plant(sprite)
@@ -116,6 +120,7 @@ void Sunflower::create_sun()
 }
 void Sunflower::update(float dt)
 {
+	this->sprite;
 	interval--;
 	if (interval == 0)
 	{
@@ -141,8 +146,8 @@ void Nut::update(float dt)
 }
 PotatoMine::PotatoMine(Sprite* sprite) :Plant(sprite)
 {
-	blood = 500;
-	interval = 5 * 60;
+	blood = 50;
+	interval = 20 * 60;
 }
 void PotatoMine::ready()
 {
@@ -153,7 +158,7 @@ void PotatoMine::ready()
 void PotatoMine::wait()
 {
 	sprite->stopAllActions();
-	sprite->setTexture("pictures/plant/potato_mine/wait.png");
+	sprite->setTexture("pictures/plant/potato_mine/2.png");
 }
 void PotatoMine::play_music()
 {
@@ -162,6 +167,7 @@ void PotatoMine::play_music()
 }
 void PotatoMine::update(float dt)
 {
+	this->sprite;
 	if (interval != 0)
 		interval--;
 	else                     /*启动后开始检测前方僵尸*/
@@ -171,72 +177,19 @@ void PotatoMine::update(float dt)
 			ready();
 			is_ready = 1;
 		}
-		std::vector<Zombie*>::iterator it;
-		switch (line)
+		for (std::vector<Zombie*>::iterator it = current_line->begin(); it < current_line->end(); it++)
 		{
-		case 0:
-			for (it = line_1.begin(); it < line_1.end(); it++)
+			if ((*it)->position.x - position.x < 40 && (*it)->position.x - position.x >= 0)
 			{
-				if ((*it)->position.x - position.x < 40 && (*it)->position.x - position.x >= 0)
-				{
-					(*it)->blood = -1;
-					die(); /*销毁了*/
-					play_music();
-				}
+				(*it)->blood = -1;
+				die(); /*销毁了*/
+				play_music();
+				return;
 			}
-			break;
-		case 1:
-			for (it = line_2.begin(); it < line_2.end(); it++)
-			{
-				if ((*it)->position.x - position.x < 40 && (*it)->position.x - position.x >= 0)
-				{
-					(*it)->blood = -1;
-					die(); /*销毁了*/
-					play_music();
-				}
-			}
-			break;
-		case 2:
-			for (it = line_3.begin(); it < line_3.end(); it++)
-			{
-				if ((*it)->position.x - position.x < 40 && (*it)->position.x - position.x >= 0)
-				{
-					(*it)->blood = -1;
-					die(); /*销毁了*/
-					play_music();
-				}
-			}
-			break;
-		case 3:
-			for (it = line_4.begin(); it < line_4.end(); it++)
-			{
-				if ((*it)->position.x - position.x < 40 && (*it)->position.x - position.x >= 0)
-				{
-					(*it)->blood = -1;
-					die(); /*销毁了*/
-					play_music();
-				}
-			}
-			break;
-		case 4:
-			for (it = line_5.begin(); it < line_5.end(); it++)
-			{
-				if ((*it)->position.x - position.x < 40 && (*it)->position.x - position.x >= 0)
-				{
-					(*it)->blood = -1;
-					die(); /*销毁了*/
-					play_music();
-				}
-			}
-			break;
 		}
 	}
 	if (blood <= 0)
 		die();
 }
 /*以上为土地雷所重写函数*/
-void Plant::setBasic(std::string FrameDir,int wait_num)
-{
-	this->FrameDir = FrameDir;
-	this->wait_num = wait_num;
-}
+

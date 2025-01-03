@@ -48,32 +48,19 @@ USING_NS_CC;
 
 #define SUN_DURATION  5*60
 #define READY_DURATION 6*60
-#define FLUSH_DURATION 4*60*60 + READY_DURATION
+#define FLUSH_DURATION 2*60*60 + READY_DURATION
 /*以上为相应动作时间间隔*/
 class PVZ : public cocos2d::Scene
 {
     Size visibleSize;
-    Sprite* startButton;
-    Sprite* exitButton;
-public:
-    static cocos2d::Scene* createScene();
-    virtual bool init();
     void addBackground();
     void addmusic();
-    void addstartButton();
-    void init_startButton_event();
-    bool touch_startButton_began(Touch* t, Event* e);
-    bool touch_startButton_end(Touch* t, Event* e);
-
-    void addexitButton();
-    void init_exitButton_event();
-    bool touch_exitButton_began(Touch* t, Event* e);
-    bool touch_exitButton_end(Touch* t, Event* e);
-
     void get_progress();    /*读取当前关卡进展*/
     void loadResource();
     void stopmusic();
-    void end();       /*结束游戏*/
+public:
+    static cocos2d::Scene* createScene();
+    virtual bool init();
     CREATE_FUNC(PVZ);
 };
 /*初始页面类*/

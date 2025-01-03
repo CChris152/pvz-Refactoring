@@ -5,35 +5,20 @@ car::car(Sprite* outside_sprite,int outside_line)
 	Sprite::onEnter();
 	sprite = outside_sprite;
 	line = outside_line;
+	switch (line)
+	{
+	case 1: current_line = &line_1; break;
+	case 2: current_line = &line_2; break;
+	case 3: current_line = &line_3; break;
+	case 4: current_line = &line_4; break;
+	case 5: current_line = &line_5; break;
+	}
 	this->scheduleUpdate();
 }
 void car::update(float dt)
 {
-	std::vector<Zombie*>::iterator it;   	/*指向僵尸数组的迭代器*/
-	int size = 0;  /*用于得到当vector的容量*/
-	switch (line) /*根据行值来将迭代器指向对应vector的开头位置*/
-	{
-	case 1:
-		it = line_1.begin();
-		size = line_1.size();
-		break;
-	case 2:
-		it = line_2.begin();
-		size = line_2.size();
-		break;
-	case 3:
-		it = line_3.begin();
-		size = line_3.size();
-		break;
-	case 4:
-		it = line_4.begin();
-		size = line_4.size();
-		break;
-	case 5:
-		it = line_5.begin();
-		size = line_5.size();
-		break;
-	}
+	std::vector<Zombie*>::iterator it=current_line->begin();   	/*指向僵尸数组的迭代器*/
+	int size = current_line->size();  /*用于得到当vector的容量*/
 	if (!(is_on))       /*未开启小车时判断最前面僵尸的位置是否到达启动位置*/
 	{
 		if(size!=0)   /*首先得有僵尸*/

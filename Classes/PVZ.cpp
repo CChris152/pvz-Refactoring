@@ -50,9 +50,71 @@ void PVZ::get_progress()
 void PVZ::loadResource()
 {
 	addBackground();
-	addstartButton();
-	addexitButton();
 	addmusic();
+
+	// 定义按钮信息结构
+	struct ButtonInfo {
+		std::string normalImage;
+		std::string selectedImage;
+		Vec2 position;
+		std::function<void()> callback;
+	};
+
+	// 定义所有按钮的信息
+	std::vector<ButtonInfo> buttons = {
+		{
+			"pictures/icon/begin.png",
+			"pictures/icon/begin_select.png",
+			Vec2(600, 450),
+			[this]() {
+				stopmusic();
+				auto scene = select::createScene();
+				Director::getInstance()->replaceScene(scene);
+			}
+		},
+		{
+			"pictures/icon/exit.png",
+			"pictures/icon/exit_select.png",
+			Vec2(850, 570),
+			[this]() {
+				Director::getInstance()->end();
+			}
+		}
+	};
+
+	// 添加所有按钮
+	for (const auto& button : buttons) {
+		auto sprite = Sprite::create(button.normalImage);
+		sprite->setPosition(button.position);
+		this->addChild(sprite, 1);
+
+		auto listener = EventListenerTouchOneByOne::create();
+
+		// 触摸开始
+		listener->onTouchBegan = [button](Touch* t, Event* e) {
+			Vec2 pt = t->getLocation();
+			auto sprite = static_cast<Sprite*>(e->getCurrentTarget());
+			if (sprite->getBoundingBox().containsPoint(pt)) {
+				sprite->setTexture(button.selectedImage);
+				return true;
+			}
+			return false;
+			};
+
+		// 触摸结束
+		listener->onTouchEnded = [this, button](Touch* t, Event* e) {
+			Vec2 pt = t->getLocation();
+			auto sprite = static_cast<Sprite*>(e->getCurrentTarget());
+			sprite->setTexture(button.normalImage);
+			if (sprite->getBoundingBox().containsPoint(pt)) {
+				button.callback();
+				return true;
+			}
+			return false;
+			};
+
+		_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, sprite);
+	}
 }
 void PVZ::addBackground()
 {
@@ -65,98 +127,8 @@ void PVZ::addmusic()
 	auto audio = SimpleAudioEngine::getInstance();
 	audio->playBackgroundMusic("Music/start.ogg", true);
 }
-
-/*开始按钮相关函数*/
-void PVZ::addstartButton()     /*添加开始按钮*/
-{
-	startButton = Sprite::create("pictures/icon/begin.png");
-	startButton->setPosition(Vec2(600, 450));
-	addChild(startButton, 1);
-	init_startButton_event();
-}
-void PVZ::init_startButton_event()         /*创建开始按钮监听器*/
-{
-	auto startListener = EventListenerTouchOneByOne::create();
-	startListener->onTouchBegan = CC_CALLBACK_2(PVZ::touch_startButton_began, this);
-	startListener->onTouchEnded = CC_CALLBACK_2(PVZ::touch_startButton_end, this);
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(startListener, startButton);
-}
-bool PVZ::touch_startButton_began(Touch* t, Event* e)
-{
-	Vec2 pt = t->getLocation();      /*得到当前坐标*/
-	auto sprite = static_cast<Sprite*>(e->getCurrentTarget());       /*取得当前坐标的对象*/
-	if (sprite->getBoundingBox().containsPoint(pt))
-	{
-		log("began");
-		sprite->setTexture("pictures/icon/begin_select.png"); /*将图片变为选择状态*/
-		return true;
-	}
-	return false;
-}
-bool PVZ::touch_startButton_end(Touch* t, Event* e)
-{
-	Vec2 pt = t->getLocation();
-	auto sprite = static_cast<Sprite*>(e->getCurrentTarget());
-	if (sprite->getBoundingBox().containsPoint(pt))
-	{
-		stopmusic();
-		auto scene = select::createScene();     /*创建第一关场景*/
-		Director::getInstance()->replaceScene(scene);
-		return true;
-	}
-	sprite->setTexture("pictures/icon/begin.png"); /*将图片变为未选择状态*/
-	return false;
-}
-
-
-/*退出按钮相关函数*/
-void PVZ::addexitButton()      /*添加退出按钮*/
-{
-	exitButton = Sprite::create("pictures/icon/exit.png");
-	exitButton->setPosition(Vec2(850, 570));
-	addChild(exitButton, 1);
-	init_exitButton_event();
-}
-void PVZ::init_exitButton_event()      /*创建退出监听器*/
-{
-	auto exitListener = EventListenerTouchOneByOne::create();
-	exitListener->onTouchBegan = CC_CALLBACK_2(PVZ::touch_exitButton_began, this);
-	exitListener->onTouchEnded = CC_CALLBACK_2(PVZ::touch_exitButton_end, this);
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(exitListener, exitButton);
-}
-bool PVZ::touch_exitButton_began(Touch* t, Event* e)
-{
-	Vec2 pt = t->getLocation();      /*得到当前坐标*/
-	auto sprite = static_cast<Sprite*>(e->getCurrentTarget());       /*取得当前坐标的对象*/
-	if (sprite->getBoundingBox().containsPoint(pt))
-	{
-		log("exit-began-true");
-		sprite->setTexture("pictures/icon/exit_select.png"); /*将图片变为选择状态*/
-		return true;
-	}
-	log("exit-began-false");
-	return false;
-}
-bool PVZ::touch_exitButton_end(Touch* t, Event* e)
-{
-	Vec2 pt = t->getLocation();
-	auto sprite = static_cast<Sprite*>(e->getCurrentTarget());
-	if (sprite->getBoundingBox().containsPoint(pt))
-	{
-		sprite->setTexture("pictures/icon/exit.png"); /*将图片变为未选择状态*/
-		Director::getInstance()->end();      /*退出*/
-		return true;
-	}
-	sprite->setTexture("pictures/icon/exit.png"); /*将图片变为未选择状态*/
-	return false;
-}
 void PVZ::stopmusic()
 {
 	auto audio = SimpleAudioEngine::getInstance();
 	audio->stopBackgroundMusic();
 }
-
-/*
-鼠标点击与精灵绑定参考代码
-https://blog.csdn.net/arv002/article/details/132108748?spm=1001.2014.3001.5501
-*/
