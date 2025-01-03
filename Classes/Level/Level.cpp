@@ -14,7 +14,7 @@ Level::~Level()
 	line_3.clear();
 	line_4.clear();
 	line_5.clear();
-	all_sun.clear();
+	sunPool.clear();
 	all_bullet.clear();
 	total = 0;
 
@@ -32,7 +32,7 @@ void Level::off_car()
 void Level::off_sun()
 {
 	std::vector<sun*>::iterator it;
-	for (it = all_sun.begin(); it != all_sun.end(); it++)
+	for (it = sunPool.begin(); it != sunPool.end(); it++)
 	{
 		(*it)->unscheduleUpdate();
 		delete (*it);
@@ -403,7 +403,7 @@ void Level::stop_zombie()
 void Level::stop_sun()
 {
 	std::vector<sun*>::iterator it;
-	for (it = all_sun.begin(); it != all_sun.end(); it++)
+	for (it = sunPool.begin(); it != sunPool.end(); it++)
 	{
 		(*it)->unscheduleUpdate();
 		(*it)->sprite->stopAllActions();

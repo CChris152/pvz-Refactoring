@@ -83,7 +83,7 @@ extern std::vector<Zombie*>line_2;
 extern std::vector<Zombie*>line_3;
 extern std::vector<Zombie*>line_4;
 extern std::vector<Zombie*>line_5;
-extern std::vector<sun*>all_sun;
+extern std::vector<sun*>sunPool;
 extern std::vector<Bullet*>all_bullet;
 extern car* all_car[5];
 extern int total;

@@ -79,13 +79,41 @@ bool GamingState::judge_fail()
 }
 void GamingState::add_sun(Level* level)
 {
-	auto s = Sprite::create("pictures/sun.png");
+	sun* a = nullptr;
+	for (sun* tmp : sunPool) //从池中获取对象
+	{
+		if (tmp->getState() == false)
+		{
+			a = tmp;
+			a->setBusy();
+			break;
+		}
+	}
+	if (a == nullptr)
+	{
+		auto s = Sprite::create("pictures/sun.png");
+		a = new sun(s);
+		level->addChild(s, 5);
+		sunPool.push_back(a);
+	}
+	else
+	{
+		a->sprite->setOpacity(255);
+		a->init_listener();
+		a->scheduleUpdate();
+	}
+	int x = 70 + rand() % 735;
+	a->sprite->setPosition(x, SUN_START);
+	a->fall();
+		/*
+			auto s = Sprite::create("pictures/sun.png");
 	sun* a = new sun(s);
-	all_sun.push_back(a);
+	sunPool.push_back(a);
 	level->addChild(s, 5);
-	int x = 70 + rand() % 735;   /*控制生成横位置在[70,805)*/
+	int x = 70 + rand() % 735;   
 	s->setPosition(x, SUN_START);
-	a->fall();   /*执行掉落*/
+	a->fall();   
+		*/
 }
 void FlushState::handle(Level* level)
 {

@@ -8,20 +8,25 @@ sun::sun(Sprite*outside_sprite)
 }
 sun::~sun()
 {
+	sprite->getParent()->removeChild(sprite);
 	Sprite::onExit();
 }
 void sun::sun_init()
 {
+	busy = true;
 	init_listener();
 	this->scheduleUpdate();
 }
 void sun::update(float dt)
 {
 	Vec2 pt=sprite->getPosition();
-	if (pt == Vec2(105, 545)&&is_move==1)    
+	if (fabs(pt.x-105)+fabs(pt.y-545)<5&&is_move==1)    
 		/*为了防止说自然掉落时到达(105,545)位置就被清除，使用is_move来判断是否被点击*/
 	{
-		sprite->getParent()->removeChild(sprite);
+		sprite->setOpacity(0);
+		sprite->getEventDispatcher()->removeEventListenersForTarget(sprite);
+		busy = false;
+		is_move = false;
 		total += 50;
 		this->unscheduleUpdate();
 	}
@@ -59,6 +64,7 @@ void sun::play_music()
 {
 	auto audio = SimpleAudioEngine::getInstance();
 	audio->playEffect("Music/sun.mp3", false);
+	CCLOG("STATE:%d,MOVE:%d", this->busy,this->is_move);
 }
 void sun::move()
 {

@@ -18,6 +18,6 @@ active object
 已完成
 使用Factory进行植物与僵尸的创建
 使用State进行Level状态进行
+使用Bridge进行card设计
+使用池化技术生成太阳
 
-未完成
-使用线程池重构太阳或子弹生成逻辑

@@ -39,7 +39,7 @@ protected:
     bool is_play = 0;        /*用于标识是否播放了一大波僵尸的动画*/
     bool is_win_play = 0;           /*标识胜利动画是否播放*/
     bool is_flush = 0;        /*用于判断当前波次是否释放完全*/
-    LevelState* current_state = new ReadyState();
+    LevelState* current_state;
 
 
     void off_car();

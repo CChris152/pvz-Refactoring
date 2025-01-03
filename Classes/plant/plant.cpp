@@ -87,12 +87,31 @@ Sunflower::Sunflower(Sprite* sprite):Plant(sprite)
 }
 void Sunflower::create_sun()
 {
-	auto s = Sprite::create("pictures/sun.png");
-	sun* a = new sun(s);
+	sun* a = nullptr;
+	for (sun* tmp : sunPool) //从池中获取对象
+	{
+		if (tmp->getState() == false)
+		{
+			a = tmp;
+			a->setBusy();
+			break;
+		}
+	}
+	if (a == nullptr)
+	{
+		auto s = Sprite::create("pictures/sun.png");
+		a = new sun(s);
+		sprite->getParent()->addChild(s, 3);
+		sunPool.push_back(a);
+	}
+	else
+	{
+		a->sprite->setOpacity(255);
+		a->init_listener();
+		a->scheduleUpdate();
+	}
 
-	all_sun.push_back(a);
-	sprite->getParent()->addChild(s, 3);
-	s->setPosition(position.x, position.y);     /*以向日葵位置为基准*/
+	a->sprite->setPosition(position.x, position.y);     /*以向日葵位置为基准*/
 	a->create();
 }
 void Sunflower::update(float dt)
