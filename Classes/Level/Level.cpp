@@ -99,6 +99,7 @@ bool Level::init()
 	loadResoure();
 	this->scheduleUpdate();
 	setState(new ReadyState());
+	ZombieFactory::add_buckethead_zombie(LINE_3, this);
 	return true;
 }
 void Level::loadResoure()

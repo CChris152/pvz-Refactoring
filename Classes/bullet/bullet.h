@@ -6,6 +6,7 @@ class Bullet :public Sprite
 {
 private:
     std::vector<Zombie*>* current_line = nullptr;
+    static Sprite* sharedSprite; // 静态成员，用于共享纹理
     Sprite* sprite;
     int line;
     Vec2 position;

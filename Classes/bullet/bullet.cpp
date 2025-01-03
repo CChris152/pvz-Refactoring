@@ -1,19 +1,34 @@
 #include "PVZ.h"
 USING_NS_CC;
-Bullet::Bullet(cocos2d::Node*parent)
+Sprite* Bullet::sharedSprite = nullptr;
+Bullet::Bullet(cocos2d::Node* parent)
 {
 	Sprite::onEnter();
-	sprite = Sprite::create("pictures/bullet/pea.png");
+	if (!sharedSprite) {
+		sharedSprite = Sprite::create("pictures/bullet/pea.png"); // åªåˆ›å»ºä¸€æ¬¡
+		if (!sharedSprite) {
+			CCLOG("Failed to create sharedSprite");
+		}
+		else {
+			sharedSprite->retain(); // ä¿æŒå¯¹çº¹ç†çš„å¼•ç”¨
+		}
+	}
+	sprite = Sprite::createWithTexture(sharedSprite->getTexture()); // åˆ›å»ºæ–°çš„Spriteå®žä¾‹
 	parent->addChild(sprite, 3);
 }
 Bullet::~Bullet()
 {
+	if (sharedSprite) {
+		sharedSprite->release(); // é‡Šæ”¾çº¹ç†å¼•ç”¨
+		sharedSprite = nullptr; // é¿å…æ‚¬ç©ºæŒ‡é’ˆ
+	}
+	this->unscheduleUpdate();
 	Sprite::onExit();
 }
 void Bullet::get_line()
 {
 	int i = static_cast<int>((570 - position.y + 13) / 100);
-	/*¼Ó13ÊÇÒòÎª×Óµ¯µÄÎ»ÖÃ»á±È³õÊ¼Î»ÖÃ¸ß13£¬ÕâÑù²ÅÄÜºÍÍã¶¹ÉäÊÖµÄ×ìË®Æ½*/
+	/*ï¿½ï¿½13ï¿½ï¿½ï¿½ï¿½Îªï¿½Óµï¿½ï¿½ï¿½Î»ï¿½Ã»ï¿½È³ï¿½Ê¼Î»ï¿½Ã¸ï¿½13ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Üºï¿½ï¿½ã¶¹ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½Ë®Æ½*/
 	line = i;
 
 	switch (line)
@@ -32,7 +47,8 @@ void Bullet::move()
 }
 void Bullet::update(float dt)
 {
-	position = sprite->getPosition();
+	auto pt = sprite->getPosition();
+	position = pt;
 	is_zombie();
 }
 void Bullet::load(Vec2 position)
