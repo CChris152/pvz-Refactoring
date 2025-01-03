@@ -8,11 +8,11 @@ Sprite* Factory::add_sprite(cocos2d::Node* parent,int layer)
 }
 
 /*工厂基类函数*/
-zombie* ZombieFactory::add_zombie(double line, cocos2d::Node* parent)
+Zombie* ZombieFactory::add_zombie(double line, cocos2d::Node* parent)
 {
 	auto sprite = Factory::add_sprite(parent, 3);
 	sprite->setPosition(Vec2(START_POSITION, line));
-	zombie* normal = new zombie(sprite, line);
+	Zombie* normal = new Zombie(sprite, line);
 	int i = static_cast<int>((600 - line) / 100);
 	switch (i)
 	{
@@ -46,17 +46,17 @@ void ZombieFactory::add_buckethead_zombie(double line, cocos2d::Node* parent)
 {
 	load_buckethead(add_zombie(line, parent));
 }
-void ZombieFactory::load_normal(zombie * zombie)
+void ZombieFactory::load_normal(Zombie * zombie)
 {
 	zombie->setBasic("pictures/zombie/normal/", 60, 1200, 0,21,22);
 	zombie->loadResource();
 }
-void ZombieFactory::load_flag(zombie* zombie)
+void ZombieFactory::load_flag(Zombie* zombie)
 {
 	zombie->setBasic("pictures/zombie/Flag/", 20, 1200, 1, 11,12 );
 	zombie->loadResource();
 }
-void ZombieFactory::load_buckethead(zombie* zombie)
+void ZombieFactory::load_buckethead(Zombie* zombie)
 {
 	zombie->setBasic("pictures/zombie/Buckethead/", 60, 3600, 2, 11, 15);
 	zombie->loadResource();

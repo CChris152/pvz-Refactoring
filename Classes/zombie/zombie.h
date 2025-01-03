@@ -4,7 +4,7 @@ USING_NS_CC;
 #define NORMAL 0
 #define FLAG   1
 #define BUCKETHEAD 2
-class zombie :public Sprite
+class Zombie :public Sprite
 {
 protected:
     double attack = 300;
@@ -30,8 +30,8 @@ public:
     bool is_eat=0;
     bool is_die=0;
     bool is_wait=0;
-    zombie(Sprite* outside_sprite, double line);
-    ~zombie();
+    Zombie(Sprite* outside_sprite, double line);
+    ~Zombie();
     void setBasic(std::string FrameDir, int speed,double blood,int type,int eat_num,int move_num);
     void die();
     bool judge_eat();

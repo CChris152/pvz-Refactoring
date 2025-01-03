@@ -40,7 +40,7 @@ void Level::off_sun()
 }
 void Level::off_zombie_schedule()
 {
-	std::vector<zombie*>::iterator it;
+	std::vector<Zombie*>::iterator it;
 	for (it = line_1.begin(); it != line_1.end(); it++)   /*关闭所有的定时器，并删除分配好的内存*/
 	{
 		(*it)->unscheduleUpdate();
@@ -97,8 +97,8 @@ bool Level::init()
 	}
 	visibleSize = Director::getInstance()->getVisibleSize(); /*获取窗口大小*/
 	loadResoure();
-	this->setState(new FlushState());
 	this->scheduleUpdate();
+	setState(new ReadyState());
 	return true;
 }
 void Level::loadResoure()
@@ -134,25 +134,36 @@ void Level::addshop()
 }
 void Level::addcard()
 {
+
+	/*
 	bullet_shooter_card.sprite = Sprite::create("pictures/card/bullets_shooter.png");
 	addChild(bullet_shooter_card.sprite, 2);
 	bullet_shooter_card.card_init();
+	*/
 	/*豌豆射手卡片添加*/
 
-	Sunflower_Card.sprite = Sprite::create("pictures/card/sunflower.png");
+	/*
+		Sunflower_Card.sprite = Sprite::create("pictures/card/sunflower.png");
 	addChild(Sunflower_Card.sprite, 2);
 	Sunflower_Card.card_init();
+	*/
+
 	/*向日葵卡片添加*/
 
-
-	Nut_Card.sprite = Sprite::create("pictures/card/nut.png");
+	/*
+		Nut_Card.sprite = Sprite::create("pictures/card/nut.png");
 	addChild(Nut_Card.sprite, 2);
 	Nut_Card.card_init();
+	*/
+
 	/*坚果墙卡片添加*/
 
-	Potato_Mine_Card.sprite = Sprite::create("pictures/card/potato_mine.png");
+	/*
+		Potato_Mine_Card.sprite = Sprite::create("pictures/card/potato_mine.png");
 	addChild(Potato_Mine_Card.sprite, 2);
 	Potato_Mine_Card.card_init();
+	*/
+
 	/*土地雷卡片添加*/
 }
 void Level::addcar()
@@ -226,227 +237,22 @@ bool Level::touch_shovel_began(Touch* t, Event* e)
 }
 bool Level::is_in_board(Vec2 pt)
 {
-	/*考虑到执行循环或者将两个判断参数进行处理都会减少运行效率，直接使用判断*/
-	if (fabs(pt.x - BLOCK_1) < 20)        /*检测当前格子处是否可以放置*/
-	{
-		if (fabs(pt.y - LINE_1 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_2 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_3 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_4 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_5 < 20))
-			return true;
-		else
-			return false;
-	}
-	if (fabs(pt.x - BLOCK_2) < 20)
-	{
-		if (fabs(pt.y - LINE_1 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_2 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_3 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_4 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_5 < 20))
-			return true;
-		else
-			return false;
-	}
-	if (fabs(pt.x - BLOCK_3) < 20)
-	{
-		if (fabs(pt.y - LINE_1 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_2 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_3 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_4 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_5 < 20))
-			return true;
-		else
-			return false;
-	}
-	if (fabs(pt.x - BLOCK_4) < 20)
-	{
-		if (fabs(pt.y - LINE_1 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_2 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_3 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_4 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_5 < 20))
-			return true;
-		else
-			return false;
-	}
-	if (fabs(pt.x - BLOCK_5) < 20)
-	{
-		if (fabs(pt.y - LINE_1 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_2 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_3 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_4 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_5 < 20))
-			return true;
-		else
-			return false;
-	}
-	if (fabs(pt.x - BLOCK_6) < 20)
-	{
-		if (fabs(pt.y - LINE_1 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_2 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_3 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_4 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_5 < 20))
-			return true;
-		else
-			return false;
-	}
-	if (fabs(pt.x - BLOCK_7) < 20)
-	{
-		if (fabs(pt.y - LINE_1 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_2 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_3 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_4 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_5 < 20))
-			return true;
-		else
-			return false;
-	}
-	if (fabs(pt.x - BLOCK_8) < 20)
-	{
-		if (fabs(pt.y - LINE_1 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_2 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_3 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_4 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_5 < 20))
-			return true;
-		else
-			return false;
-	}
-	if (fabs(pt.x - BLOCK_9) < 20)
-	{
-		if (fabs(pt.y - LINE_1 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_2 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_3 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_4 < 20))
-			return true;
-		else
-			return false;
-		if (fabs(pt.y - LINE_5 < 20))
-			return true;
-		else
-			return false;
-	}
-	return false;
+	auto checkLine = [&](int block) {
+		return fabs(pt.x - block) < 20 &&
+			(fabs(pt.y - LINE_1) < 20 || fabs(pt.y - LINE_2) < 20 ||
+				fabs(pt.y - LINE_3) < 20 || fabs(pt.y - LINE_4) < 20 ||
+				fabs(pt.y - LINE_5) < 20);
+		};
+
+	return checkLine(BLOCK_1) || checkLine(BLOCK_2) || checkLine(BLOCK_3) ||
+		checkLine(BLOCK_4) || checkLine(BLOCK_5) || checkLine(BLOCK_6) ||
+		checkLine(BLOCK_7) || checkLine(BLOCK_8) || checkLine(BLOCK_9);
 }
 bool Level::is_empty(Vec2 pt)
 {
-	/*判断该位置是否有植物*/
-	int row, line;
-	row = static_cast<int>((pt.x - 125+50) / 85);  /*为了实现四舍五入，加上一个五十*/
-	line = static_cast<int>((fabs(600 - pt.y)) / 100) - 1;
-	if (row >= 0 && row < 9)
-		if (line >= 0 && line < 5)
-			if (board[line][row] == NULL)
-				return true;
-	return false;
+	int row = static_cast<int>((pt.x - 125 + 50) / 85);
+	int line = static_cast<int>((fabs(600 - pt.y)) / 100) - 1;
+	return (row >= 0 && row < 9 && line >= 0 && line < 5 && board[line][row] == NULL);
 }
 bool Level::touch_shovel_end(Touch* t, Event* e)
 {
@@ -525,6 +331,7 @@ void Level::addzombie()
 void Level::update(float dt)
 {
 	sun_total->setString(StringUtils::format("%d", total));   /*刷新太阳总数*/
+	time++;
 	if (current_state)
 	{
 		current_state->handle(this);
@@ -566,7 +373,7 @@ void Level::stop_bullet()
 }
 void Level::stop_zombie()
 {
-	std::vector<zombie*>::iterator it;
+	std::vector<Zombie*>::iterator it;
 	for (it = line_1.begin(); it != line_1.end(); it++)   
 	{
 		(*it)->unscheduleUpdate();
@@ -615,17 +422,15 @@ Scene* Level_1::createScene()
 }
 void Level_1::addcard()
 {
-	per = 30;
+	per = 60;
 	flush_time = 1000;
 	Buckethead_num = 0;
-	bullet_shooter_card.sprite = Sprite::create("pictures/card/bullets_shooter.png");
-	addChild(bullet_shooter_card.sprite, 2);
-	bullet_shooter_card.card_init();
+
+	bulletShooterCard.card_init(this, new BulletShooterCardBehavior());
+	sunflowerCard.card_init(this, new SunflowerCardBehavior());
 	/*豌豆射手卡片添加*/
 
-	Sunflower_Card.sprite = Sprite::create("pictures/card/sunflower.png");
-	addChild(Sunflower_Card.sprite, 2);
-	Sunflower_Card.card_init();
+    
 	/*向日葵卡片添加*/
 	addcar();
 }
@@ -712,24 +517,9 @@ Scene* Level_2::createScene()
 }
 void Level_2::addcard()
 {
-	per = 50;
-	flush_time = 1500;
-	Buckethead_num = 5;
-	bullet_shooter_card.sprite = Sprite::create("pictures/card/bullets_shooter.png");
-	addChild(bullet_shooter_card.sprite, 2);
-	bullet_shooter_card.card_init();
-	/*豌豆射手卡片添加*/
-
-	Sunflower_Card.sprite = Sprite::create("pictures/card/sunflower.png");
-	addChild(Sunflower_Card.sprite, 2);
-	Sunflower_Card.card_init();
-	/*向日葵卡片添加*/
-
-
-	Nut_Card.sprite = Sprite::create("pictures/card/nut.png");
-	addChild(Nut_Card.sprite, 2);
-	Nut_Card.card_init();
-	/*坚果墙卡片添加*/
+	bulletShooterCard.card_init(this, new BulletShooterCardBehavior());
+	sunflowerCard.card_init(this, new SunflowerCardBehavior());
+	
 	addcar();
 }
 void Level_2::flush()

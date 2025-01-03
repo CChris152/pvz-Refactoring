@@ -8,7 +8,7 @@ class Plant :public Sprite
     bool is_wait;
     int wait_num;
 protected:
-    std::vector<zombie*>* current_line = nullptr;
+    std::vector<Zombie*>* current_line = nullptr;
     int interval;
     Vector<SpriteFrame*> waitFrames;
     std::string FrameDir;

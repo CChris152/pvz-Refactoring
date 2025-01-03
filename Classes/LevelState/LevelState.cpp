@@ -44,7 +44,7 @@ void GamingState::handle(Level* level)
 bool GamingState::judge_fail()
 {
 	/*因为没有安排速度更快的僵尸，所以每一行vector的第一个元素一定是位置最前的僵尸，只需检测0位置的僵尸位置即可*/
-	std::vector<zombie*>::iterator it;
+	std::vector<Zombie*>::iterator it;
 	it = line_1.begin();
 	if (line_1.size() != 0)
 	{

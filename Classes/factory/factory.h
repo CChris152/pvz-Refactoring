@@ -12,11 +12,11 @@ public:
 };
 class ZombieFactory:Factory  //僵尸工厂
 {
-    static void load_normal(zombie* zombie);
-    static void load_flag(zombie* zombie);
-    static void load_buckethead(zombie* zombie);
+    static void load_normal(Zombie* zombie);
+    static void load_flag(Zombie* zombie);
+    static void load_buckethead(Zombie* zombie);
 public:
-    static zombie* add_zombie(double line, cocos2d::Node* parent);
+    static Zombie* add_zombie(double line, cocos2d::Node* parent);
     static void add_normal_zombie(double line, cocos2d::Node* parent);
     static void add_flag_zombie(double line, cocos2d::Node* parent);
     static void add_buckethead_zombie(double line, cocos2d::Node* parent);

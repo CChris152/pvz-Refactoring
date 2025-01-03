@@ -11,12 +11,11 @@ class Level :public cocos2d::Scene
     Sprite* loadingBar;
     Sprite* shovel;
 protected:
-    card bullet_shooter_card;
-    sunflower_card Sunflower_Card;
-    nut_card Nut_Card;
-    potato_mine_card Potato_Mine_Card;
+    Card bulletShooterCard;
+    Card sunflowerCard;
+    Card nutCard;
+    Card potatoMineCard;
     Label* sun_total;
-
 
     int sun_duration = 0;
     int ready_duration = 0;

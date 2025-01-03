@@ -152,7 +152,7 @@ void PotatoMine::update(float dt)
 			ready();
 			is_ready = 1;
 		}
-		std::vector<zombie*>::iterator it;
+		std::vector<Zombie*>::iterator it;
 		switch (line)
 		{
 		case 0:

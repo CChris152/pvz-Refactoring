@@ -1,29 +1,29 @@
 #include "PVZ.h"
 USING_NS_CC;
-zombie::~zombie()
+Zombie::~Zombie()
 {
 	Sprite::onExit();
 }
-zombie::zombie(Sprite *outside_sprite,double outside_line)
+Zombie::Zombie(Sprite *outside_sprite,double outside_line)
 {
 	Sprite::onEnter();
 	sprite = outside_sprite;
 	line = static_cast<int>((600-outside_line)/100);
 	this->scheduleUpdate();
 }
-void zombie::loadResource()
+void Zombie::loadResource()
 {
 	position = sprite->getPosition();
 	init_animate();
 	move();
 }
-void zombie::eatmusic()
+void Zombie::eatmusic()
 {
 	auto audio = SimpleAudioEngine::getInstance();
 	audio->setEffectsVolume(0.2);
 	eat_music=audio->playEffect("Music/eat.mp3", true, 1.0f, 1.0f, 1.0f);
 }
-void zombie::update(float dt)
+void Zombie::update(float dt)
 {
 	position = sprite->getPosition();     /*获取当前坐标位置*/
 	row = static_cast<int>((position.x - 125) / 85);
@@ -47,7 +47,7 @@ void zombie::update(float dt)
 	}
 
 }
-void zombie::die()
+void Zombie::die()
 {
 	unscheduleUpdate();    /*关闭定时器*/
 	sprite->getParent()->removeChild(sprite);
@@ -75,7 +75,7 @@ void zombie::die()
 		break;
 	}
 }
-void zombie::eat()
+void Zombie::eat()
 {
 	is_eat = true;
 	is_wait = false;
@@ -84,7 +84,7 @@ void zombie::eat()
 	sprite->runAction(RepeatForever::create(
 		Animate::create(Animation::createWithSpriteFrames(eatFrames, 1.0/10))));;
 }
-void zombie::move()
+void Zombie::move()
 {
 	is_eat = false;
 	is_wait = false;
@@ -95,7 +95,7 @@ void zombie::move()
 		Animate::create(Animation::createWithSpriteFrames(moveFrames, 1.0 / 8)
 		)));
 }
-void zombie::wait()
+void Zombie::wait()
 {
 	is_eat = false;
 	is_wait = true;
@@ -104,14 +104,14 @@ void zombie::wait()
 	sprite->runAction(RepeatForever::create(
 		Animate::create(Animation::createWithSpriteFrames(waitFrames, 1.0 / 15))));;
 }
-void zombie::init_animate()
+void Zombie::init_animate()
 {
 	init_move_animate();
 	init_eat_animate();
 	init_wait_animate();
 	init_die_animate();
 }
-void zombie::init_move_animate()
+void Zombie::init_move_animate()
 {
 	for (int i = 1; i < move_num + 1; i++)
 	{
@@ -119,7 +119,7 @@ void zombie::init_move_animate()
 		moveFrames.pushBack(SpriteFrame::create(FrameDir+"move/"+num+".png", Rect(0, 0, 166, 144)));
 	}
 }
-void zombie::init_eat_animate()
+void Zombie::init_eat_animate()
 {
 	for (int i = 1; i < eat_num + 1; i++)
 	{
@@ -127,7 +127,7 @@ void zombie::init_eat_animate()
 		eatFrames.pushBack(SpriteFrame::create(FrameDir + "eat/" + num + ".png", Rect(0, 0, 166, 144)));
 	}
 }
-void zombie::init_wait_animate()
+void Zombie::init_wait_animate()
 {
 	for (int i = 1; i < 11 + 1; i++)
 	{
@@ -135,7 +135,7 @@ void zombie::init_wait_animate()
 		waitFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/wait/" + num + ".png", Rect(0, 0, 166, 144)));
 	}
 }
-void zombie::init_die_animate()
+void Zombie::init_die_animate()
 {
 	for (int i = 1; i < 20+1; i++)
 	{
@@ -143,7 +143,7 @@ void zombie::init_die_animate()
 		dieFrames.pushBack(SpriteFrame::create("pictures/zombie/normal/die/" + num + ".png", Rect(0, 0, 166, 144)));
 	}
 }
-bool zombie::judge_eat()
+bool Zombie::judge_eat()
 {
 	int i = line-1;
 	static int k;
@@ -185,14 +185,14 @@ bool zombie::judge_eat()
 	}
 	return false;    /*一行都遍历完毕还没有遇到植物，则返回false*/
 }
-void zombie::stopmusic()
+void Zombie::stopmusic()
 {
 	auto audio = SimpleAudioEngine::getInstance();
 	audio->stopEffect(eat_music);
 }
 
 /*Refectoring*/
-void zombie::setBasic(std::string FrameDir, int speed, double blood, int type,int eat_num,int move_num)
+void Zombie::setBasic(std::string FrameDir, int speed, double blood, int type,int eat_num,int move_num)
 {
 	this->FrameDir = FrameDir;
 	this->speed = speed;

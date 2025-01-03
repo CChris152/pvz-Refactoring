@@ -1,11 +1,11 @@
 #pragma once
 #include"cocos2d.h"
-class zombie;
+class Zombie;
 USING_NS_CC;
 class Bullet :public Sprite
 {
 private:
-    std::vector<zombie*>* current_line = nullptr;
+    std::vector<Zombie*>* current_line = nullptr;
     Sprite* sprite;
     int line;
     Vec2 position;

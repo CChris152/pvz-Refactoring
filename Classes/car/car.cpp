@@ -9,7 +9,7 @@ car::car(Sprite* outside_sprite,int outside_line)
 }
 void car::update(float dt)
 {
-	std::vector<zombie*>::iterator it;   	/*指向僵尸数组的迭代器*/
+	std::vector<Zombie*>::iterator it;   	/*指向僵尸数组的迭代器*/
 	int size = 0;  /*用于得到当vector的容量*/
 	switch (line) /*根据行值来将迭代器指向对应vector的开头位置*/
 	{

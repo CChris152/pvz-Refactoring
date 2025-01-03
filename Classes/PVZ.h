@@ -15,6 +15,7 @@
 #include<select/select.h>
 #include "editor-support/cocostudio/SimpleAudioEngine.h"
 #include<LevelState/LevelState.h>
+#include<SpriteClick/SpriteClick.h>
 using namespace CocosDenshion;
 USING_NS_CC;
 #define LINE_1 470.0
@@ -77,11 +78,11 @@ public:
 };
 /*≥ı º“≥√Ê¿‡*/
 extern Plant* board[5][9];
-extern std::vector<zombie*>line_1;
-extern std::vector<zombie*>line_2;
-extern std::vector<zombie*>line_3;
-extern std::vector<zombie*>line_4;
-extern std::vector<zombie*>line_5;
+extern std::vector<Zombie*>line_1;
+extern std::vector<Zombie*>line_2;
+extern std::vector<Zombie*>line_3;
+extern std::vector<Zombie*>line_4;
+extern std::vector<Zombie*>line_5;
 extern std::vector<sun*>all_sun;
 extern std::vector<Bullet*>all_bullet;
 extern car* all_car[5];
