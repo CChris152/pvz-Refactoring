@@ -51,70 +51,20 @@ void PVZ::loadResource()
 {
 	addBackground();
 	addmusic();
-
-	// 定义按钮信息结构
-	struct ButtonInfo {
-		std::string normalImage;
-		std::string selectedImage;
-		Vec2 position;
-		std::function<void()> callback;
-	};
-
-	// 定义所有按钮的信息
-	std::vector<ButtonInfo> buttons = {
-		{
-			"pictures/icon/begin.png",
-			"pictures/icon/begin_select.png",
-			Vec2(600, 450),
-			[this]() {
-				stopmusic();
-				auto scene = select::createScene();
-				Director::getInstance()->replaceScene(scene);
-			}
-		},
-		{
-			"pictures/icon/exit.png",
-			"pictures/icon/exit_select.png",
-			Vec2(850, 570),
-			[this]() {
-				Director::getInstance()->end();
-			}
-		}
-	};
-
-	// 添加所有按钮
-	for (const auto& button : buttons) {
-		auto sprite = Sprite::create(button.normalImage);
-		sprite->setPosition(button.position);
-		this->addChild(sprite, 1);
-
-		auto listener = EventListenerTouchOneByOne::create();
-
-		// 触摸开始
-		listener->onTouchBegan = [button](Touch* t, Event* e) {
-			Vec2 pt = t->getLocation();
-			auto sprite = static_cast<Sprite*>(e->getCurrentTarget());
-			if (sprite->getBoundingBox().containsPoint(pt)) {
-				sprite->setTexture(button.selectedImage);
-				return true;
-			}
-			return false;
-			};
-
-		// 触摸结束
-		listener->onTouchEnded = [this, button](Touch* t, Event* e) {
-			Vec2 pt = t->getLocation();
-			auto sprite = static_cast<Sprite*>(e->getCurrentTarget());
-			sprite->setTexture(button.normalImage);
-			if (sprite->getBoundingBox().containsPoint(pt)) {
-				button.callback();
-				return true;
-			}
-			return false;
-			};
-
-		_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, sprite);
-	}
+	new ButtonTemplate<std::function<void()>>(this,
+		"pictures/icon/begin.png",
+		Vec2(600, 450),
+		[this]() {
+			stopmusic();
+			auto scene = select::createScene();
+			Director::getInstance()->replaceScene(scene);
+		});
+	new ButtonTemplate<std::function<void()>>(this,
+		"pictures/icon/exit.png",
+		Vec2(850, 570),
+		[this]() {
+			Director::getInstance()->end();
+		});
 }
 void PVZ::addBackground()
 {

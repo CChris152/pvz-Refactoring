@@ -64,6 +64,72 @@ public:
     CREATE_FUNC(PVZ);
 };
 /*初始页面类*/
+
+
+template<typename Action = std::function<void()>>
+class ButtonTemplate {
+public:
+	ButtonTemplate(Scene* scene,
+		const std::string& spritePath,
+		const Vec2& position,
+		Action&& action,
+		bool* unlockFlag = nullptr)
+		: scene_(scene)
+		, spritePath_(spritePath)
+		, position_(position)
+		, action_(std::forward<Action>(action))
+		, unlockFlag_(unlockFlag)
+	{
+		initButton();
+	}
+
+	void initButton() {
+		sprite_ = Sprite::create(spritePath_);
+		sprite_->setPosition(position_);
+		scene_->addChild(sprite_, 2);
+		initEvent();
+	}
+
+	void initEvent() {
+		auto listener = EventListenerTouchOneByOne::create();
+		listener->onTouchBegan = CC_CALLBACK_2(ButtonTemplate::onTouchBegan, this);
+		listener->onTouchEnded = CC_CALLBACK_2(ButtonTemplate::onTouchEnded, this);
+		// 使用 Director 来获取 EventDispatcher
+		Director::getInstance()->getEventDispatcher()
+			->addEventListenerWithSceneGraphPriority(listener, sprite_);
+	}
+
+	bool onTouchBegan(Touch* t, Event* e) {
+		Vec2 pt = t->getLocation();
+		auto sprite = static_cast<Sprite*>(e->getCurrentTarget());
+		return sprite->getBoundingBox().containsPoint(pt);
+	}
+
+	bool onTouchEnded(Touch* t, Event* e) {
+		Vec2 pt = t->getLocation();
+		auto sprite = static_cast<Sprite*>(e->getCurrentTarget());
+		if (sprite->getBoundingBox().containsPoint(pt)) {
+			if (!unlockFlag_ || *unlockFlag_) {
+				if (auto selectScene = dynamic_cast<Scene*>(scene_)) {
+					select::stop_music();
+				}
+				action_();
+				return true;
+			}
+		}
+		return false;
+	}
+
+private:
+	Scene* scene_;
+	Sprite* sprite_;
+	std::string spritePath_;
+	Vec2 position_;
+	Action action_;
+	bool* unlockFlag_;
+};
+
+
 extern Plant* board[5][9];
 extern std::vector<Zombie*>line_1;
 extern std::vector<Zombie*>line_2;

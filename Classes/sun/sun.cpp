@@ -6,7 +6,7 @@ sun::sun(Sprite*outside_sprite)
 	sprite=outside_sprite;
 	sun_init();
 }
-sun::~sun()
+sun::~sun()	
 {
 	sprite->getParent()->removeChild(sprite);
 	Sprite::onExit();

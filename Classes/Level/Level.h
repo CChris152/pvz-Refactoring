@@ -20,25 +20,6 @@ protected:
     int sun_duration = 0;
     int ready_duration = 0;
 
-    int per = 60;     /*单次出怪概率*/
-    int level = 1;    /*当前关卡标记*/
-    int sun_interval = 5 * 60;    /*太阳生成的时间间隔*/
-    int ready_interval = 6 * 60;      /*僵尸开始生成前的准备时间*/
-    int zombie_interval = 15 * 60;      /*第一次生成僵尸的间隔点，总得久一点不然不用玩了*/
-    //int time=4*60*60;                      /*单位为 分*秒*帧数,总时间*/
-    int zombie_total = 50;
-    int flush_time = 2000;       /*一大波僵尸释放总时间*/
-    int win_time = 280;          /*胜利动画所用时间*/
-    int num_1 = 0;
-    int num_2 = 0;
-    int num_3 = 0;
-    int num_4 = 0;
-    int num_5 = 0;
-    /*以上用于纪录当前生成的僵尸在行上的分布，总不能运气太差全生成在一行了，强行调整一下*/
-    int Buckethead_num = 6;        /*铁通僵尸总数*/
-    bool is_play = 0;        /*用于标识是否播放了一大波僵尸的动画*/
-    bool is_win_play = 0;           /*标识胜利动画是否播放*/
-    bool is_flush = 0;        /*用于判断当前波次是否释放完全*/
     LevelState* current_state;
 
 
@@ -61,13 +42,9 @@ protected:
     bool touch_shovel_end(Touch* t, Event* e);
     /*铲子相关函数如上*/
     void addexitButton();
-    void init_exitButton_event();
-    bool touch_exitButton_began(Touch* t, Event* e);
-    bool touch_exitButton_end(Touch* t, Event* e);
     /*退出选项相关函数如上*/
 
     /*菜单选项相关函数如上*/
-    virtual void flush();        /*一大波僵尸来时进行的操作*/
 
     /*以上为动态添加单位函数*/
     bool is_in_board(Vec2 pt);
@@ -82,9 +59,9 @@ private:
     int time = 0;
 public:
     ~Level();
+    virtual void set_level_ready() {};  /*完成关卡时用于纪录胜利情况*/
     template <typename T>
     void off_schedule(std::vector<T*>& vec);
-    virtual void set_level_ready() {};  /*完成关卡时用于纪录胜利情况*/
     void stop();
     void addzombie();    /*这个是周期性添加僵尸的函数，不是单独加僵尸的函数*/
     void back_to_select();

@@ -83,7 +83,6 @@ bool Level::init()
 	loadResoure();
 	this->scheduleUpdate();
 	setState(new ReadyState());
-	ZombieFactory::add_buckethead_zombie(LINE_3, this);
 	return true;
 }
 void Level::loadResoure()
@@ -233,45 +232,14 @@ bool Level::touch_shovel_end(Touch* t, Event* e)
 
 void Level::addexitButton()      /*添加退出按钮*/
 {
-	exitButton = Sprite::create("pictures/icon/exit.png");
-	exitButton->setPosition(Vec2(800, 550));
-	addChild(exitButton, 1);
-	init_exitButton_event();
+	new ButtonTemplate<std::function<void()>>(this,
+		"pictures/icon/exit.png",
+		Vec2(800, 550),
+		[this]() {
+			back_to_select();
+		});
 }
-void Level::init_exitButton_event()      /*创建退出监听器*/
-{
-	auto exitListener = EventListenerTouchOneByOne::create();
-	exitListener->onTouchBegan = CC_CALLBACK_2(Level::touch_exitButton_began, this);
-	exitListener->onTouchEnded = CC_CALLBACK_2(Level::touch_exitButton_end, this);
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(exitListener, exitButton);
-}
-bool Level::touch_exitButton_began(Touch* t, Event* e)
-{
-	Vec2 pt = t->getLocation();      /*得到当前坐标*/
-	auto sprite = static_cast<Sprite*>(e->getCurrentTarget());       /*取得当前坐标的对象*/
-	if (sprite->getBoundingBox().containsPoint(pt))
-	{
-		sprite->setTexture("pictures/icon/exit_select.png"); /*将图片变为选择状态*/
-		return true;
-	}
-	return false;
-}
-bool Level::touch_exitButton_end(Touch* t, Event* e)
-{
-	Vec2 pt = t->getLocation();
-	auto sprite = static_cast<Sprite*>(e->getCurrentTarget());
-	if (sprite->getBoundingBox().containsPoint(pt))
-	{
-		sprite->setTexture("pictures/icon/exit.png"); /*将图片变为未选择状态*/
-		back_to_select();
-		return true;
-	}
-	sprite->setTexture("pictures/icon/exit.png"); /*将图片变为未选择状态*/
-	return false;
-}
-
 /*可点击精灵相应函数如上*/
-
 void Level::back_to_select()
 {
 	stop_music();
@@ -292,10 +260,6 @@ void Level::update(float dt)
 	{
 		current_state->handle(this);
 	}
-}
-void Level::flush()
-{
-
 }
 
 void Level::stop()
@@ -379,10 +343,6 @@ Scene* Level_1::createScene()
 }
 void Level_1::addcard()
 {
-	per = 60;
-	flush_time = 2000;
-	Buckethead_num = 0;
-
 	bulletShooterCard.card_init(this, new BulletShooterCardBehavior());
 	sunflowerCard.card_init(this, new SunflowerCardBehavior());
 	/*豌豆射手卡片添加*/
